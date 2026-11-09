@@ -12,7 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-/** Each player picks a country. Both may pick the same one. */
+/*
+*Panel donde los jugadores escogen sus personajes, cada uno a cada lado ademas de con los indicativos de cuals keybinds les corresponde
+ */
 public class CharacterSelectPanel extends JPanel {
     private List<String> ids;
     private JToggleButton[][] buttons;

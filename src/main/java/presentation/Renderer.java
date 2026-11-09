@@ -37,6 +37,23 @@ public class Renderer {
         AURA.put("Illusion", new Color(0xD946EF));
     }
 
+    /** Draws the visual of one effect on the affected character. */
+    @FunctionalInterface
+    private interface EffectPainter {
+        void paint(Graphics2D g, Character c);
+    }
+
+    // One painter per effect class. A new Effect only needs a painter registered here.
+    private final Map<Class<? extends Effect>, EffectPainter> effectPainters = new HashMap<>();
+    private final EffectPainter stunPainter = this::drawStars;
+
+    public Renderer() {
+        effectPainters.put(Electrocuted.class, this::drawLightning);
+        effectPainters.put(Push.class, this::drawPushArrows);
+        effectPainters.put(Confusion.class, this::drawQuestionMark);
+        effectPainters.put(Unconscious.class, stunPainter);
+    }
+
     public void render(Graphics2D g, Match match) {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -87,31 +104,43 @@ public class Renderer {
 
         if (c.isPowerActive()) drawAura(g, c);
 
+        // Big head (as wide as the hitbox) on top of a narrow body.
+        int hd = (int) w;
+        int bodyW = 34;
+        int bodyX = (int) (x + (w - bodyW) / 2);
+        int bodyTop = (int) y + hd - 12;
+        int bodyH = (int) (y + h) - bodyTop;
+
         g.setColor(body);
-        g.fillRoundRect((int) x, (int) (y + 50), (int) w, (int) (h - 50), 18, 18);
+        g.fillRoundRect(bodyX, bodyTop, bodyW, bodyH, 14, 14);
         g.setColor(owner);
         g.setStroke(new BasicStroke(4));
-        g.drawRoundRect((int) x, (int) (y + 50), (int) w, (int) (h - 50), 18, 18);
+        g.drawRoundRect(bodyX, bodyTop, bodyW, bodyH, 14, 14);
 
-        int hd = 60;
-        int hx = (int) (x + (w - hd) / 2), hy = (int) y;
+        int hx = (int) x, hy = (int) y;
         g.setColor(new Color(0xF1C27D));
         g.fillOval(hx, hy, hd, hd);
         g.setColor(Color.DARK_GRAY);
         g.setStroke(new BasicStroke(2));
         g.drawOval(hx, hy, hd, hd);
-        int eyeX = hx + hd / 2 + face * 12;
+        int eyeX = hx + hd / 2 + face * 16;
         g.setColor(Color.BLACK);
-        g.fillOval(eyeX - 10, hy + 22, 8, 8);
-        g.fillOval(eyeX + 4, hy + 22, 8, 8);
+        g.fillOval(eyeX - 13, hy + 30, 10, 10);
+        g.fillOval(eyeX + 3, hy + 30, 10, 10);
 
-        g.setColor(new Color(0x222222));
+        // Feet: a block covering the whole bottom of the body. While kicking it stretches forward
+        // until the end of the kick hitbox.
+        int feetH = 22;
+        int feetX = bodyX - 10;
+        int feetW = bodyW + 20;
+        int feetY = (int) (y + h) - feetH;
+        int from = feetX, to = feetX + feetW;
         if (c.getKickTime() > 0) {
-            double fx = face > 0 ? x + w : x - Character.KICK_REACH;
-            g.fillRoundRect((int) fx, (int) (y + h - 28), (int) Character.KICK_REACH, 24, 12, 12);
-        } else {
-            g.fillRoundRect((int) (face > 0 ? x + w - 10 : x - 12), (int) (y + h - 14), 22, 14, 8, 8);
+            if (face > 0) to = (int) (x + w + Character.KICK_REACH);
+            else from = (int) (x - Character.KICK_REACH);
         }
+        g.setColor(new Color(0x222222));
+        g.fillRoundRect(from, feetY, to - from, feetH, 14, 14);
 
         drawEffect(g, c);
         drawLabel(g, c, owner);
@@ -124,51 +153,60 @@ public class Renderer {
             int grow = (int) (8 + k * 9 + pulse * 6);
             g.setColor(new Color(base.getRed(), base.getGreen(), base.getBlue(), 90 - k * 25));
             g.fillOval((int) c.getX() - grow, (int) c.getY() - grow,
-                       (int) c.getWidth() + 2 * grow, (int) c.getHeight() + 2 * grow);
+                    (int) c.getWidth() + 2 * grow, (int) c.getHeight() + 2 * grow);
         }
     }
 
     private void drawEffect(Graphics2D g, Character c) {
-        Effect e = c.getEffect();
-        double x = c.getX(), y = c.getY(), w = c.getWidth(), h = c.getHeight();
         Stroke old = g.getStroke();
-        if (e instanceof Electrocuted) {
-            Random r = new Random(System.currentTimeMillis() / 70 + c.getOwnerSlot());
-            g.setColor(new Color(0xFFE23B));
-            g.setStroke(new BasicStroke(3));
-            for (int i = 0; i < 6; i++) {
-                int px = (int) (x - 10 + r.nextDouble() * (w + 20)), py = (int) (y + r.nextDouble() * h);
-                for (int s = 0; s < 4; s++) {
-                    int nx = px + r.nextInt(25) - 12, ny = py + r.nextInt(25) - 12;
-                    g.drawLine(px, py, nx, ny);
-                    px = nx;
-                    py = ny;
-                }
-            }
-        } else if (e instanceof Push) {
-            int dir = c.getOwnerSlot() == 0 ? -1 : 1;
-            g.setColor(new Color(0x2D8CFF));
-            g.setStroke(new BasicStroke(5));
-            for (int k = 0; k < 3; k++) {
-                int px = (int) (x + w / 2 - dir * (w / 2 + 20 + k * 24));
-                int py = (int) (y + h / 2);
-                g.drawLine(px, py - 16, px + dir * 14, py);
-                g.drawLine(px + dir * 14, py, px, py + 16);
-            }
-        } else if (e instanceof Confusion) {
-            g.setColor(new Color(0xD946EF));
-            g.setFont(new Font("SansSerif", Font.BOLD, 44));
-            g.drawString("?", (int) (x + w / 2 + 34), (int) (y + 30));
-        }
-        if (e instanceof Unconscious || c.isStunned()) {
-            double t = System.currentTimeMillis() / 250.0;
-            g.setColor(new Color(0xFFD700));
-            for (int k = 0; k < 3; k++) {
-                double a = t + k * 2 * Math.PI / 3;
-                g.fillOval((int) (x + w / 2 + Math.cos(a) * 34 - 6), (int) (y - 4 + Math.sin(a) * 9 - 6), 12, 12);
-            }
-        }
+        Effect e = c.getEffect();
+        EffectPainter painter = e == null ? null : effectPainters.get(e.getClass());
+        if (painter != null) painter.paint(g, c);
+        if (c.isStunned() && painter != stunPainter) drawStars(g, c);
         g.setStroke(old);
+    }
+
+    private void drawLightning(Graphics2D g, Character c) {
+        Random r = new Random(System.currentTimeMillis() / 70 + c.getOwnerSlot());
+        g.setColor(new Color(0xFFE23B));
+        g.setStroke(new BasicStroke(3));
+        for (int i = 0; i < 6; i++) {
+            int px = (int) (c.getX() - 10 + r.nextDouble() * (c.getWidth() + 20));
+            int py = (int) (c.getY() + r.nextDouble() * c.getHeight());
+            for (int s = 0; s < 4; s++) {
+                int nx = px + r.nextInt(25) - 12, ny = py + r.nextInt(25) - 12;
+                g.drawLine(px, py, nx, ny);
+                px = nx;
+                py = ny;
+            }
+        }
+    }
+
+    private void drawPushArrows(Graphics2D g, Character c) {
+        int dir = c.getOwnerSlot() == 0 ? -1 : 1;
+        g.setColor(new Color(0x2D8CFF));
+        g.setStroke(new BasicStroke(5));
+        for (int k = 0; k < 3; k++) {
+            int px = (int) (c.getX() + c.getWidth() / 2 - dir * (c.getWidth() / 2 + 20 + k * 24));
+            int py = (int) (c.getY() + c.getHeight() / 2);
+            g.drawLine(px, py - 16, px + dir * 14, py);
+            g.drawLine(px + dir * 14, py, px, py + 16);
+        }
+    }
+
+    private void drawQuestionMark(Graphics2D g, Character c) {
+        g.setColor(new Color(0xD946EF));
+        g.setFont(new Font("SansSerif", Font.BOLD, 44));
+        g.drawString("?", (int) (c.getX() + c.getWidth() / 2 + 34), (int) (c.getY() + 30));
+    }
+
+    private void drawStars(Graphics2D g, Character c) {
+        double t = System.currentTimeMillis() / 250.0;
+        g.setColor(new Color(0xFFD700));
+        for (int k = 0; k < 3; k++) {
+            double a = t + k * 2 * Math.PI / 3;
+            g.fillOval((int) (c.getX() + c.getWidth() / 2 + Math.cos(a) * 34 - 6), (int) (c.getY() - 4 + Math.sin(a) * 9 - 6), 12, 12);
+        }
     }
 
     private void drawLabel(Graphics2D g, Character c, Color owner) {

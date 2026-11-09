@@ -10,7 +10,7 @@ public class Human extends Player {
 
     public Human(int slot) { super(slot, 1, 1, 1, 1); }
 
-    /** Called by the GUI with the current keyboard state. */
+    //lo llama la GUI para concoer el estado actual del input del usuario
     public void setInput(boolean left, boolean right, boolean jump, boolean kick, boolean power) {
         leftPressed = left;
         rightPressed = right;
@@ -37,6 +37,6 @@ public class Human extends Player {
     public int getPoints() { return points; }
 
     public void buyUpgrade(String stat) throws DopoSoccerException {
-        throw new DopoSoccerException(DopoSoccerException.NOT_IMPLEMENTED + ": upgrades (version 2)");
+        throw new DopoSoccerException(DopoSoccerException.NOT_IMPLEMENTED + ": aun no hay persistencia para upgrades");
     }
 }

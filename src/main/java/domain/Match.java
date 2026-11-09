@@ -5,10 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
+/*
+*El semi arquitecto de todo, Match es el el encargad de cada aspecto durante su exisistencia, siendo el que establecce el como y que
+*ademas de que es el encargado de Update el metodo responsable de hacer llamadas a nivel logico para actualizar todo y despues efectuarlo en GUI
+ */
 public abstract class Match {
-    public static final double GRAVITY = 2200;
-    public static final double KICK_BALL_SPEED = 900, KICK_BALL_LIFT = 600;
+    public static final double GRAVITY = 1700;
+    public static final double KICK_BALL_SPEED = 600, KICK_BALL_LIFT = 750;
 
     private boolean paused;
     private boolean finished;
@@ -37,7 +40,7 @@ public abstract class Match {
         resetPositions();
     }
 
-    /** One simulation step. The GUI only calls this and then repaints. */
+    //GUI manda a update a avisarle que le toca redibujar acorde a la logica interna redibujada
     public void update(double dt) {
         if (paused || finished) return;
         for (Player p : players) p.act(this);
@@ -119,7 +122,7 @@ public abstract class Match {
         if (surface != null && shooter.getPower().endsOnContact(surface)) ball.clearPowerShot();
     }
 
-    /** Regla 8: the new effect replaces the previous one. */
+    //los efectos sobreescriben otros
     public void applyEffect(Character target, Effect effect) {
         Effect old = target.getEffect();
         if (old != null) old.end(target, this);

@@ -2,9 +2,11 @@ package presentation;
 
 import domain.Match;
 
-/** Game thread: fixed time step, updates the domain and asks the GUI to repaint. */
+/**
+ * Corre el dominio constantemente para conocer que presentar por cada frame
+ * */
 public class GameLoop implements Runnable {
-    private static final double STEP = 1.0 / 120;
+    private static final double STEP = 1.0 / 60;
     private static final int MAX_STEPS_PER_FRAME = 12;
 
     private final Match match;

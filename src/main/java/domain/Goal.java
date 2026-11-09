@@ -10,7 +10,7 @@ public class Goal {
         this.height = height;
     }
 
-    /** True when the center of the object is inside the goal area. */
+    //Revisa que el centro del objeto este dentro de este
     public boolean contains(GameObject o) {
         return o.getCenterX() >= x && o.getCenterX() <= x + width
             && o.getCenterY() >= y && o.getCenterY() <= y + height;

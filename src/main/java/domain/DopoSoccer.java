@@ -1,14 +1,16 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
-/** Facade of the domain. The GUI talks to this class. */
+/*
+* DopoSoccer es la clase principal del dominio y el que dara inicio a todo el dominio
+* @Throws Maneja las DopoSoccerException que para esta version las categorizamos en dos tipos
+* las de logica de negocio/codigo y las no implementadas
+ */
+
 public class DopoSoccer {
-    private Map<String, Function<Player, Character>> catalog = new LinkedHashMap<>();
+    private Map<String, Function<Player, Character>> catalog = new HashMap<>();
     private Player[] players = new Player[2];
     private Match match;
 
@@ -22,19 +24,22 @@ public class DopoSoccer {
     public void setHuman(int slot) throws DopoSoccerException {
         checkSlot(slot);
         Human h = new Human(slot);
-        for (String id : catalog.keySet()) h.unlock(id);   // no persistence yet: everything unlocked
+        for (String id : catalog.keySet()) h.unlock(id);   // sin persistencia todo estara desbloqueado por ahora
         players[slot] = h;
     }
 
     public void setCPU(int slot, String profile) throws DopoSoccerException {
-        throw new DopoSoccerException(DopoSoccerException.NOT_IMPLEMENTED + ": CPU players (version 3)");
+        throw new DopoSoccerException(DopoSoccerException.NOT_IMPLEMENTED + "Aun sin terminar la CPU");
     }
 
     public void choose(int slot, String characterId) throws DopoSoccerException {
         checkSlot(slot);
-        if (players[slot] == null) throw new DopoSoccerException(DopoSoccerException.PLAYER_NOT_SET + ": slot " + slot);
-        if (!catalog.containsKey(characterId))
+        if (players[slot] == null) {
+            throw new DopoSoccerException(DopoSoccerException.PLAYER_NOT_SET + ": slot " + slot);
+        }
+        if (!catalog.containsKey(characterId)) {
             throw new DopoSoccerException(DopoSoccerException.UNKNOWN_CHARACTER + ": " + characterId);
+        }
         players[slot].chooseCharacter(characterId);
     }
 
@@ -49,11 +54,11 @@ public class DopoSoccer {
     }
 
     public void save(String path) throws DopoSoccerException {
-        throw new DopoSoccerException(DopoSoccerException.NOT_IMPLEMENTED + ": save (version 2)");
+        throw new DopoSoccerException(DopoSoccerException.NOT_IMPLEMENTED + ": aun sin persistencia");
     }
 
     public void open(String path) throws DopoSoccerException {
-        throw new DopoSoccerException(DopoSoccerException.NOT_IMPLEMENTED + ": open (version 2)");
+        throw new DopoSoccerException(DopoSoccerException.NOT_IMPLEMENTED + ": aun sin persistencia");
     }
 
     private void checkSlot(int slot) throws DopoSoccerException {

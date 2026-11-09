@@ -1,5 +1,8 @@
 package domain;
-
+/*
+* Powers empleados por los charecters cpn sus efectos anclados teniendo sus metodos respecto a lo que hacen con los
+* GameObjects
+ */
 public abstract class Power {
     protected String name;
     protected double baseDamage;
@@ -11,19 +14,19 @@ public abstract class Power {
         this.effect = effect;
     }
 
-    /** Turns the real ball into this power's shot. */
+    //transforma la ball en el tiro especial
     public abstract void launch(Character shooter, Ball ball, Match match);
 
-    /** Damage = baseDamage * kickMultiplier, then the effect replaces the rival's current one. */
+    //Calcula daño y despues aplicara el efecto correspondiente al otro jugador
     public void onHit(Character shooter, Character rival, Match match) {
         rival.receiveDamage(baseDamage * shooter.getKickMultiplier());
         match.applyEffect(rival, effect);
     }
 
-    /** By default any contact ends the shot. Subclasses may ignore some surfaces. */
+    //Determina si el power termina al hacer contacto
     public boolean endsOnContact(String surface) { return true; }
 
-    /** Places the ball in front of the shooter and sends it straight, without gravity. */
+    //Coloca el balon frente al jugador y deshabilita la gravedad durante
     protected void fire(Character shooter, Ball ball, double speed) {
         int dir = shooter.getFacing();
         double x = dir > 0 ? shooter.getX() + shooter.getWidth() + 2 : shooter.getX() - ball.getWidth() - 2;

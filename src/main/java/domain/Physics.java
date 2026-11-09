@@ -1,7 +1,10 @@
 package domain;
 
 import java.util.List;
-
+/*
+* Physics es nuestro "motor de fisicas" creado a base de calculos siendo step el movimiento de los GameObjects y
+* los demas metodos solventores para cosas como colisiones y objetos que lleguen a salir de limite o lo intente corregirlos}
+*/
 public class Physics {
     private double gravity;
 
@@ -42,7 +45,6 @@ public class Physics {
         }
     }
 
-    /** Two solid bodies block each other: separate along the axis of least overlap. */
     public void resolveBlock(GameObject a, GameObject b) {
         if (!a.intersects(b)) return;
         double ox = Math.min(a.getX() + a.getWidth(), b.getX() + b.getWidth()) - Math.max(a.getX(), b.getX());

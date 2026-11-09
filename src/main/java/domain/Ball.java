@@ -5,8 +5,8 @@ public class Ball extends GameObject {
     public static final double RESTITUTION = 0.8;
 
     private boolean real;
-    private Character shooter;       // != null while it is a power shot in flight
-    private String lastContact;      // surface touched during the last physics step
+    private Character shooter;
+    private String lastContact;
 
     public Ball(double x, double y, boolean real) {
         super(x, y, SIZE, SIZE);

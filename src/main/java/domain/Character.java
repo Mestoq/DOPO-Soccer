@@ -1,6 +1,9 @@
 package domain;
 
-/** A character in play. Created by Match from the player's chosen id. */
+/**
+ * El personaje escogido en base al ID escogido desde la GUI y el catalog
+ * match iterara con este toda la partida y es lo que el player utiliza, por ende este charecter tendra el id al que corresponde ademas de otros atributos
+ * */
 public abstract class Character extends GameObject {
     public static final double WIDTH = 80, HEIGHT = 120;
     public static final double BASE_SPEED = 420, BASE_JUMP = 950;
@@ -32,6 +35,7 @@ public abstract class Character extends GameObject {
         this.facing = ownerSlot == 0 ? 1 : -1;
         setRestitution(0);
     }
+//Aqui estan todas las mecanicas logicas que pueden hacer en el field
 
     public void move(int direction) {
         if (!canMove()) return;
@@ -80,7 +84,7 @@ public abstract class Character extends GameObject {
 
     public void receiveGoal() { powerBar = Math.min(1.0, powerBar + 0.25); }
     public void consumePower() { powerActive = false; }
-
+//Todos estos booleans van conrespecto a los powers y los efectos sobre los jugadores
     public boolean isStunned() { return stunnedTime > 0; }
     public boolean canMove() { return !isStunned() && (effect == null || effect.canMove()); }
     public boolean canJump() { return !isStunned() && (effect == null || effect.canJump()); }
@@ -88,7 +92,7 @@ public abstract class Character extends GameObject {
     public double getSpeedFactor() { return effect == null ? 1.0 : effect.getSpeedFactor(); }
     public double getKickDamage() { return BASE_KICK_DAMAGE * kickMultiplier; }
 
-    /** The kick hitbox is the zone in front of the feet, active while kickTime > 0. */
+    //Hitbox del pie para las pateadas, con un delay para evitar hayan bugs visuales y logicas
     public boolean isInKickRange(GameObject t) {
         if (kickTime <= 0) return false;
         double zx = facing > 0 ? getX() + getWidth() : getX() - KICK_REACH;
@@ -97,14 +101,13 @@ public abstract class Character extends GameObject {
         return zx < t.getX() + t.getWidth() && zx + KICK_REACH > t.getX()
             && zy < t.getY() + t.getHeight() && zy + zh > t.getY();
     }
-
     public boolean isKickActive() { return kickTime > 0 && !kickHandled; }
     public void markKickHandled() { kickHandled = true; }
 
     public void setEffect(Effect e) { effect = e; }
     public Effect getEffect() { return effect; }
     public void clearEffect() { effect = null; }
-
+//getters unicamente
     public int getOwnerSlot() { return ownerSlot; }
     public String getCountryName() { return countryName; }
     public double getLife() { return life; }

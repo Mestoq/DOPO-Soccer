@@ -9,10 +9,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-/** Single JFrame with a CardLayout. The only class that knows the whole screen flow. */
+/*
+*La lcase principal que controla el Jframe y ademas conoce todo el flujo de este
+*/
 public class DopoSoccerGUI extends JFrame {
     public static final int[][] RESOLUTIONS = {{800, 450}, {1024, 576}, {1280, 720}};
-    private static final Dimension MENU_SIZE = new Dimension(820, 580);
+    private static final Dimension MENU_SIZE = new Dimension(1280, 720);
 
     private final DopoSoccer game = new DopoSoccer();
     private final CardLayout cards = new CardLayout();
@@ -26,7 +28,7 @@ public class DopoSoccerGUI extends JFrame {
     private GamePanel gamePanel;
 
     public DopoSoccerGUI() {
-        super("DOPOSoccer 2026-2");
+        super("DOPOSoccer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         config = new ConfigPanel(this);
         select = new CharacterSelectPanel(this, game.getCatalogIds());
@@ -47,7 +49,7 @@ public class DopoSoccerGUI extends JFrame {
 
     public void showConfig() { show("CONFIG", MENU_SIZE); }
 
-    /** Validates the mode early so an unavailable one is reported before choosing characters. */
+
     public void showCharacterSelect() {
         if (config.isVsMachine()) {
             try {
@@ -81,7 +83,7 @@ public class DopoSoccerGUI extends JFrame {
         gamePanel.start();
     }
 
-    /** Called on the EDT when the match ends by itself. */
+
     public void onMatchFinished() {
         ResultDialog.show(this, game.getMatch());
         showMenu();
