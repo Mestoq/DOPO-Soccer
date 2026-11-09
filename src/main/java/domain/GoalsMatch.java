@@ -21,5 +21,11 @@ public class GoalsMatch extends Match {
     @Override
     public Player getWinner() { return isOver() ? players[scoreboard.getLeader()] : null; }
 
+    @Override
+    public double getClockSeconds() { return scoreboard.getElapsedTime(); }
+
+    @Override
+    public String getObjective() { return "First to " + targetGoals; }
+
     public int getTargetGoals() { return targetGoals; }
 }

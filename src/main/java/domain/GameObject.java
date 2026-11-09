@@ -33,7 +33,8 @@ public abstract class GameObject {
 
     //Con lo que chequea en que parte esta en contacto el GameObject
     public void onBoundary(String surface) { }
-    //getters y setters para acutalizar las posiciones y estados de los objetos
+    //getters y setters
+
     public double getCenterX() { return x + width / 2; }
     public double getCenterY() { return y + height / 2; }
     public double getX() { return x; }

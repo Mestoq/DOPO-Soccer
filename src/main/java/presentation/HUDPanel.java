@@ -13,7 +13,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
-/** Always-visible score, time and per-player life and power bars. Read-only. */
+
 public class HUDPanel extends JPanel {
     public static final int HEIGHT = 84;
     private static final int BAR_W = 250;

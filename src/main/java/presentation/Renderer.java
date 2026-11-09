@@ -106,7 +106,7 @@ public class Renderer {
 
         // Big head (as wide as the hitbox) on top of a narrow body.
         int hd = (int) w;
-        int bodyW = 34;
+        int bodyW = 30;
         int bodyX = (int) (x + (w - bodyW) / 2);
         int bodyTop = (int) y + hd - 12;
         int bodyH = (int) (y + h) - bodyTop;

@@ -5,8 +5,8 @@ package domain;
  * match iterara con este toda la partida y es lo que el player utiliza, por ende este charecter tendra el id al que corresponde ademas de otros atributos
  * */
 public abstract class Character extends GameObject {
-    public static final double WIDTH = 80, HEIGHT = 120;
-    public static final double BASE_SPEED = 420, BASE_JUMP = 950;
+    public static final double WIDTH = 90, HEIGHT = 120;
+    public static final double BASE_SPEED = 400, BASE_JUMP = 750;
     public static final double BASE_KICK_DAMAGE = 10, KICK_DURATION = 0.25, KICK_REACH = 50;
     public static final double POWER_CHARGE_SECONDS = 10, STUN_SECONDS = 3;
 

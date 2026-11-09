@@ -13,7 +13,7 @@ public class TimeMatch extends Match {
         this.durationSeconds = minutes * 60.0;
     }
 
-    //Si no hay ganador cuando sea el over se juega a la muerte subita
+    /** Time is up and someone leads. A tie at time up means sudden death. */
     @Override
     public boolean isOver() {
         return scoreboard.getElapsedTime() >= durationSeconds && scoreboard.getLeader() != -1;
@@ -21,6 +21,12 @@ public class TimeMatch extends Match {
 
     @Override
     public Player getWinner() { return isOver() ? players[scoreboard.getLeader()] : null; }
+
+    @Override
+    public double getClockSeconds() { return getRemainingTime(); }
+
+    @Override
+    public String getObjective() { return isSuddenDeath() ? "SUDDEN DEATH" : ""; }
 
     public double getRemainingTime() { return Math.max(0, durationSeconds - scoreboard.getElapsedTime()); }
     public boolean isSuddenDeath() {
