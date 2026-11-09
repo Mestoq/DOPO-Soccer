@@ -104,11 +104,10 @@ public class Renderer {
 
         if (c.isPowerActive()) drawAura(g, c);
 
-        // Big head (as wide as the hitbox) on top of a narrow body.
-        int hd = (int) w;
+        int head = (int) w;
         int bodyW = 30;
         int bodyX = (int) (x + (w - bodyW) / 2);
-        int bodyTop = (int) y + hd - 12;
+        int bodyTop = (int) y + head - 12;
         int bodyH = (int) (y + h) - bodyTop;
 
         g.setColor(body);
@@ -119,17 +118,15 @@ public class Renderer {
 
         int hx = (int) x, hy = (int) y;
         g.setColor(new Color(0xF1C27D));
-        g.fillOval(hx, hy, hd, hd);
+        g.fillOval(hx, hy, head, head);
         g.setColor(Color.DARK_GRAY);
         g.setStroke(new BasicStroke(2));
-        g.drawOval(hx, hy, hd, hd);
-        int eyeX = hx + hd / 2 + face * 16;
+        g.drawOval(hx, hy, head, head);
+        int eyeX = hx + head / 2 + face * 16;
         g.setColor(Color.BLACK);
         g.fillOval(eyeX - 13, hy + 30, 10, 10);
         g.fillOval(eyeX + 3, hy + 30, 10, 10);
 
-        // Feet: a block covering the whole bottom of the body. While kicking it stretches forward
-        // until the end of the kick hitbox.
         int feetH = 22;
         int feetX = bodyX - 10;
         int feetW = bodyW + 20;

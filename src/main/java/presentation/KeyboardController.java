@@ -8,7 +8,9 @@ import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Translates the keyboard into Human.setInput(...). Esc asks the panel to pause. */
+/*
+*nuestro traductor de inputs por parte de un human
+ */
 public class KeyboardController implements KeyListener {
     private final Match match;
     private final GamePanel panel;

@@ -11,7 +11,9 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-/** Game screen: HUD on top and the court below. Owns the loop and the keyboard controller. */
+/*
+ *Hud del partido con todo lo nesesario asociado a scoreboard
+ */
 public class GamePanel extends JPanel {
     private final DopoSoccerGUI gui;
     private final Match match;

@@ -90,7 +90,7 @@ public class MainMenuPanel extends JPanel {
         g.dispose();
     }
 
-    /** The title image scaled to TITLE_WIDTH keeping its proportions; plain text when the image is missing. */
+    //configura el titulo co  la imagen si falta se pone un texto pre configurado
     private static class TitleComponent extends JComponent {
         private final BufferedImage image;
 
@@ -111,7 +111,7 @@ public class MainMenuPanel extends JPanel {
             } else {
                 g.setColor(Theme.TEXT);
                 g.setFont(new Font("SansSerif", Font.BOLD, 44));
-                g.drawString("DOPOSoccer 2026-2", 0, 50);
+                g.drawString("DOPOSoccer ", 0, 50);
             }
             g.dispose();
         }

@@ -11,7 +11,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-/** Mode, CPU profile, field resolution and match type. */
+/*
+ *  Configuramos la modalidad y requisitos de los partidos
+ * */
 public class ConfigPanel extends JPanel {
     private JRadioButton pvp = radio("Player vs Player", true);
     private JRadioButton pvm = radio("Player vs Machine", false);
