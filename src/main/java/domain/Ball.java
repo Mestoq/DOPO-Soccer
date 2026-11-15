@@ -5,8 +5,8 @@ public class Ball extends GameObject {
     public static final double RESTITUTION = 0.8;
 
     private boolean real;
-    private Character shooter;
-    private String lastContact;
+    private Character shooter;       // != null while it is a power shot in flight
+    private String lastContact;      // surface touched during the last physics step
 
     public Ball(double x, double y, boolean real) {
         super(x, y, SIZE, SIZE);
@@ -30,6 +30,9 @@ public class Ball extends GameObject {
         setGravityEnabled(true);
         setRestitution(RESTITUTION);
     }
+
+    @Override
+    public boolean bouncesOffGoals() { return true; }
 
     @Override
     public void onBoundary(String surface) { lastContact = surface; }

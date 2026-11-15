@@ -1,13 +1,11 @@
 package domain;
 
-/*
-* El campo de juego basico el cual esta ajustado para la resolucio mas grande y de ahi la GUI lo ajusta
-*/
+/** Fixed logical field (1280x720). The GUI scales the drawing to the chosen resolution. */
 public class Field {
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
     public static final int GROUND_MARGIN = 60;
-    public static final int GOAL_WIDTH = 90;
+    public static final int GOAL_WIDTH = 180;
     public static final int GOAL_HEIGHT = 240;
 
     private int width;
