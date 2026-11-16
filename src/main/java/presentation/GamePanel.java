@@ -8,16 +8,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.Comparator;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-/*
- *Hud del partido con todo lo nesesario asociado a scoreboard
- */
+/** Game screen: HUD on top and the court below. Owns the loop and the keyboard controller. */
 public class GamePanel extends JPanel {
     private final DopoSoccerGUI gui;
     private final Match match;
-    private final Renderer renderer = new Renderer();
+    private final Renderer renderer;
     private final HUDPanel hud;
     private final CourtPanel court = new CourtPanel();
     private final GameLoop loop;
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel {
     public GamePanel(DopoSoccerGUI gui, DopoSoccer game, Dimension courtSize) {
         this.gui = gui;
         this.match = game.getMatch();
+        this.renderer = new Renderer(loadBackground(courtSize.width));
         setLayout(new BorderLayout());
         hud = new HUDPanel(match, courtSize.width);
         court.setPreferredSize(courtSize);
@@ -35,6 +37,20 @@ public class GamePanel extends JPanel {
         add(hud, BorderLayout.NORTH);
         add(court, BorderLayout.CENTER);
         loop = new GameLoop(match, this::repaintAll, () -> SwingUtilities.invokeLater(gui::onMatchFinished));
+    }
+
+    /**
+     * One background image per resolution, named after the court width (e.g. match_background_1024.jpg).
+     * If the exact one is missing, the closest available resolution is used instead.
+     */
+    private static BufferedImage loadBackground(int courtWidth) {
+        Integer[] widths = Arrays.stream(DopoSoccerGUI.RESOLUTIONS).map(r -> r[0]).toArray(Integer[]::new);
+        Arrays.sort(widths, Comparator.comparingInt(w -> Math.abs(w - courtWidth)));
+        for (int w : widths) {
+            BufferedImage image = SpriteLoader.load("match_background_" + w + ".jpg");
+            if (image != null) return image;
+        }
+        return null;   // no image at all: the Renderer draws its generated background
     }
 
     public void start() {

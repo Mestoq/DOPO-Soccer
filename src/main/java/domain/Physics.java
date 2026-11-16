@@ -13,18 +13,18 @@ public class Physics {
             o.update(dt);
             resolveBounds(o, field);
             if (o.bouncesOffGoals()) {
-                resolveCrossbar(o, field.getGoalOf(0), 1);    // left goal: the field is to its right
-                resolveCrossbar(o, field.getGoalOf(1), -1);   // right goal: the field is to its left
+                resolveCrossbar(o, field.getGoalOf(0));
+                resolveCrossbar(o, field.getGoalOf(1));
             }
         }
     }
 
     /**
      * The crossbar is a solid bar on top of the goal. The mouth below it stays open so goals are possible.
-     * @param towardField +1 if the field lies to the right of the goal, -1 if to the left
      */
-    protected void resolveCrossbar(GameObject o, Goal goal, int towardField) {
-        double bx = goal.getX(), by = goal.getCrossbarY(), bw = goal.getWidth(), bh = Goal.CROSSBAR_THICKNESS;
+    protected void resolveCrossbar(GameObject o, Goal goal) {
+        int towardField = goal.getMouthDirection();
+        double bx = goal.getX(), by = goal.getCrossbarY(), bw = goal.getWidth(), bh = goal.getCrossbarThickness();
         double ox = Math.min(o.getX() + o.getWidth(), bx + bw) - Math.max(o.getX(), bx);
         double oy = Math.min(o.getY() + o.getHeight(), by + bh) - Math.max(o.getY(), by);
         if (ox <= 0 || oy <= 0) return;

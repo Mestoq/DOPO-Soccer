@@ -18,12 +18,14 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 /** Draws the domain state in logical field coordinates (1280x720). Read-only. */
 public class Renderer {
+    private final BufferedImage goalSprite = SpriteLoader.load("goal.png");
     private static final Map<String, Color> COUNTRY = new HashMap<>();
     private static final Map<String, Color> AURA = new HashMap<>();
     static {
@@ -47,7 +49,10 @@ public class Renderer {
     private final Map<Class<? extends Effect>, EffectPainter> effectPainters = new HashMap<>();
     private final EffectPainter stunPainter = this::drawStars;
 
-    public Renderer() {
+    private final BufferedImage background;   // match background for the chosen resolution, may be null
+
+    public Renderer(BufferedImage background) {
+        this.background = background;
         effectPainters.put(Electrocuted.class, this::drawLightning);
         effectPainters.put(Push.class, this::drawPushArrows);
         effectPainters.put(Confusion.class, this::drawQuestionMark);
@@ -57,6 +62,8 @@ public class Renderer {
     public void render(Graphics2D g, Match match) {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         Field field = match.getField();
         drawBackground(g, field);
         drawGoals(g, field);
@@ -65,6 +72,10 @@ public class Renderer {
     }
 
     private void drawBackground(Graphics2D g, Field f) {
+        if (background != null) {                 // image available: it replaces the generated sky and grass
+            g.drawImage(background, 0, 0, f.getWidth(), f.getHeight(), null);
+            return;
+        }
         int ground = (int) f.getGroundY();
         g.setPaint(new GradientPaint(0, 0, new Color(0x6EC1F0), 0, ground, new Color(0xD6F0FF)));
         g.fillRect(0, 0, f.getWidth(), ground);
@@ -79,6 +90,30 @@ public class Renderer {
     }
 
     private void drawGoals(Graphics2D g, Field f) {
+        if (goalSprite == null) return;                 // sin imagen no se dibuja nada
+        int iw = goalSprite.getWidth(), ih = goalSprite.getHeight();
+
+        int extraWidth = 130;                           // aumenta o disminuye este valor para el ancho total
+        int haciaAfuera = (int) (extraWidth * 0.2);     // 80% crece hacia afuera, 20% hacia adentro
+
+        for (int slot = 0; slot < 2; slot++) {
+            Goal gl = f.getGoalOf(slot);
+            int x = (int) gl.getX();
+            int y = (int) gl.getY();
+            int w = (int) gl.getWidth() + extraWidth;
+            int h = (int) gl.getHeight();
+
+            if (gl.getMouthDirection() > 0) {
+                x -= haciaAfuera;
+                g.drawImage(goalSprite, x, y, x + w, y + h, 0, 0, iw, ih, null);
+            } else {
+                x -= (extraWidth - haciaAfuera);
+                g.drawImage(goalSprite, x + w, y, x, y + h, 0, 0, iw, ih, null);
+            }
+        }
+    }
+
+    private void drawGeneratedGoals(Graphics2D g, Field f) {
         for (int slot = 0; slot < 2; slot++) {
             Goal gl = f.getGoalOf(slot);
             int x = (int) gl.getX(), y = (int) gl.getY(), w = (int) gl.getWidth(), h = (int) gl.getHeight();
@@ -104,10 +139,11 @@ public class Renderer {
 
         if (c.isPowerActive()) drawAura(g, c);
 
-        int head = (int) w;
-        int bodyW = 30;
+        // Big head (as wide as the hitbox) on top of a narrow body.
+        int hd = (int) w;
+        int bodyW = 34;
         int bodyX = (int) (x + (w - bodyW) / 2);
-        int bodyTop = (int) y + head - 12;
+        int bodyTop = (int) y + hd - 12;
         int bodyH = (int) (y + h) - bodyTop;
 
         g.setColor(body);
@@ -118,15 +154,17 @@ public class Renderer {
 
         int hx = (int) x, hy = (int) y;
         g.setColor(new Color(0xF1C27D));
-        g.fillOval(hx, hy, head, head);
+        g.fillOval(hx, hy, hd, hd);
         g.setColor(Color.DARK_GRAY);
         g.setStroke(new BasicStroke(2));
-        g.drawOval(hx, hy, head, head);
-        int eyeX = hx + head / 2 + face * 16;
+        g.drawOval(hx, hy, hd, hd);
+        int eyeX = hx + hd / 2 + face * 16;
         g.setColor(Color.BLACK);
         g.fillOval(eyeX - 13, hy + 30, 10, 10);
         g.fillOval(eyeX + 3, hy + 30, 10, 10);
 
+        // Feet: a block covering the whole bottom of the body. While kicking it stretches forward
+        // until the end of the kick hitbox.
         int feetH = 22;
         int feetX = bodyX - 10;
         int feetW = bodyW + 20;

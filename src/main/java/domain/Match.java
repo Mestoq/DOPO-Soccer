@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 public abstract class Match {
-    public static final double GRAVITY = 2200;
-    public static final double KICK_BALL_SPEED = 900, KICK_BALL_LIFT = 600;
+    public static final double GRAVITY = 1800;
+    public static final double KICK_BALL_SPEED = 600, KICK_BALL_LIFT = 900;
 
     private boolean paused;
     private boolean finished;
