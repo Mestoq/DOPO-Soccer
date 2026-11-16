@@ -1,10 +1,7 @@
 package domain;
 
 import java.util.List;
-/*
-* Physics es nuestro "motor de fisicas" creado a base de calculos siendo step el movimiento de los GameObjects y
-* los demas metodos solventores para cosas como colisiones y objetos que lleguen a salir de limite o lo intente corregirlos}
-*/
+
 public class Physics {
     private double gravity;
 
@@ -15,7 +12,39 @@ public class Physics {
             if (o.isGravityEnabled()) o.setVy(o.getVy() + gravity * dt);
             o.update(dt);
             resolveBounds(o, field);
+            if (o.bouncesOffGoals()) {
+                resolveCrossbar(o, field.getGoalOf(0));
+                resolveCrossbar(o, field.getGoalOf(1));
+            }
         }
+    }
+
+    /**
+     * The crossbar is a solid bar on top of the goal. The mouth below it stays open so goals are possible.
+     */
+    protected void resolveCrossbar(GameObject o, Goal goal) {
+        int towardField = goal.getMouthDirection();
+        double bx = goal.getX(), by = goal.getCrossbarY(), bw = goal.getWidth(), bh = goal.getCrossbarThickness();
+        double ox = Math.min(o.getX() + o.getWidth(), bx + bw) - Math.max(o.getX(), bx);
+        double oy = Math.min(o.getY() + o.getHeight(), by + bh) - Math.max(o.getY(), by);
+        if (ox <= 0 || oy <= 0) return;
+        double rest = o.getRestitution();
+        if (ox < oy) {                                   // front end of the bar (the post side)
+            o.setX(towardField > 0 ? bx + bw : bx - o.getWidth());
+            o.setVx(towardField * Math.abs(o.getVx()) * rest);
+        } else if (o.getCenterY() < by + bh / 2) {       // falls on top of the bar
+            o.setY(by - o.getHeight());
+            double vy = -Math.abs(o.getVy()) * rest;
+            if (rest < 1 && Math.abs(vy) < 60) {         // resting on the bar: roll off towards the field
+                vy = 0;
+                o.setVx(towardField * Math.max(Math.abs(o.getVx()), 300));
+            }
+            o.setVy(vy);
+        } else {                                         // hits the underside of the bar
+            o.setY(by + bh);
+            o.setVy(Math.abs(o.getVy()) * rest);
+        }
+        o.onBoundary("GOAL_FRAME");
     }
 
     protected void resolveBounds(GameObject o, Field field) {
@@ -45,6 +74,7 @@ public class Physics {
         }
     }
 
+    /** Two solid bodies block each other: separate along the axis of least overlap. */
     public void resolveBlock(GameObject a, GameObject b) {
         if (!a.intersects(b)) return;
         double ox = Math.min(a.getX() + a.getWidth(), b.getX() + b.getWidth()) - Math.max(a.getX(), b.getX());

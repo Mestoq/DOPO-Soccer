@@ -1,8 +1,6 @@
 package domain;
 
-/*
-*obedece a physics y es cualquier objeto con movimientos, gravedad y/o input, osea, charecter y ball
- */
+/** Anything with a position, a velocity and a rectangular hitbox. Y grows downwards. */
 public abstract class GameObject {
     private double x, y, vx, vy, width, height, restitution;
     private boolean gravityEnabled = true;
@@ -31,9 +29,11 @@ public abstract class GameObject {
         this.vy = 0;
     }
 
-    //Con lo que chequea en que parte esta en contacto el GameObject
+    /** True for objects that must bounce off the goal frame (crossbar). */
+    public boolean bouncesOffGoals() { return false; }
+
+    /** Hook called by Physics when this object touches FLOOR, WALL or CEILING. */
     public void onBoundary(String surface) { }
-    //getters y setters
 
     public double getCenterX() { return x + width / 2; }
     public double getCenterY() { return y + height / 2; }
