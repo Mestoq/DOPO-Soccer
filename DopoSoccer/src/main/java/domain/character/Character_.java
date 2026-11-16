@@ -1,0 +1,240 @@
+package domain.character;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import domain.DopoSoccerException;
+import domain.power.effect.Effect;
+import domain.player.Player;
+import domain.power.Power;
+import domain.match.Match;
+import domain.physics.Ball;
+import domain.physics.GameObject;
+import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.geometry.Geometry;
+import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Vector2;
+import org.dyn4j.world.World;
+
+public abstract class Character_ extends GameObject {
+
+    private static final Map<String, Supplier<Character_>> CHARACTER_FACTORIES = new HashMap<>();
+
+    static {
+        CHARACTER_FACTORIES.put("COREA DEL SUR",  KoreaCharacter::new);
+        CHARACTER_FACTORIES.put("CAMERUN",        CameroonCharacter::new);
+        CHARACTER_FACTORIES.put("NIGERIA",        NigeriaCharacter::new);
+        CHARACTER_FACTORIES.put("ESTADOS UNIDOS", UsaCharacter::new);
+    }
+
+    protected final String country;
+    protected final Power specialPower;
+    protected Effect activeEffect;
+
+    // Orientación y dimensiones
+    protected boolean facingRight;
+    protected double groundLevelY;
+
+    // Estado de patada y daño activo
+    protected boolean kicking;
+    protected double kickTimer;
+    protected double currentKickDamage;
+
+    // Modificadores alterados por los Effect (Electrocutado, Inconsciente, etc.)
+    protected double speedMultiplier;
+    protected boolean canJump;
+    protected boolean incapacitated;
+
+    protected Character_(String country, Power specialPower) {
+        super(75.0, 95.0);
+        this.country = country;
+        this.specialPower = specialPower;
+        this.activeEffect = null;
+        resetModifiers();
+    }
+
+    /**
+     * Método Factory: instancia la subclase exacta según el nombre del país.
+     */
+    public static Character_ create(String countryName) throws DopoSoccerException {
+        if (countryName == null) {
+            throw new DopoSoccerException("El nombre del personaje no puede ser nulo.");
+        }
+        Supplier<Character_> factory = CHARACTER_FACTORIES.get(countryName.trim().toUpperCase());
+        if (factory == null) {
+            throw new DopoSoccerException("Personaje no disponible: " + countryName);
+        }
+        return factory.get();
+    }
+
+    /**
+     * Configura el cuerpo rígido del personaje en dyn4j según la resolución de Field.
+     */
+    public void initPhysics(World<Body> world, double startX, double startY, double width, double height, boolean facingRight, double groundLevelY) {
+        this.logicalWidth = width;
+        this.logicalHeight = height;
+        this.facingRight = facingRight;
+        this.groundLevelY = groundLevelY;
+
+        this.body.removeAllFixtures();
+
+        double widthMeters = width / PIXELS_PER_METER;
+        double heightMeters = height / PIXELS_PER_METER;
+
+        BodyFixture mainFixture = new BodyFixture(Geometry.createCapsule(widthMeters, heightMeters));
+        mainFixture.setDensity(5.0);
+        mainFixture.setFriction(0.0);
+        mainFixture.setRestitution(0.1);
+        this.body.addFixture(mainFixture);
+
+        this.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
+
+        attachToWorld(world, startX, startY);
+    }
+
+    // logica de movimientos
+
+    public void moveLeft(int speedStat) {
+        if (this.incapacitated) {
+            stopHorizontal();
+            return;
+        }
+        double baseSpeedMeters = 3.2 * (1.0 + 0.10 * (speedStat - 1)) * this.speedMultiplier;
+        Vector2 currentVel = this.body.getLinearVelocity();
+        this.body.setLinearVelocity(-baseSpeedMeters, currentVel.y);
+    }
+
+    public void moveRight(int speedStat) {
+        if (this.incapacitated) {
+            stopHorizontal();
+            return;
+        }
+        double baseSpeedMeters = 3.2 * (1.0 + 0.10 * (speedStat - 1)) * this.speedMultiplier;
+        Vector2 currentVel = this.body.getLinearVelocity();
+        this.body.setLinearVelocity(baseSpeedMeters, currentVel.y);
+    }
+
+    public void stopHorizontal() {
+        Vector2 currentVel = this.body.getLinearVelocity();
+        this.body.setLinearVelocity(0.0, currentVel.y);
+    }
+
+    public void jump(int jumpStat) {
+        if (this.incapacitated || !this.canJump || !isOnGround()) {
+            return;
+        }
+        double jumpImpulse = -6.5 * (1.0 + 0.10 * (jumpStat - 1));
+        Vector2 currentVel = this.body.getLinearVelocity();
+        this.body.setLinearVelocity(currentVel.x, jumpImpulse);
+    }
+
+    public void kick(double kickDamage) {
+        if (this.incapacitated || this.kicking) {
+            return;
+        }
+        this.kicking = true;
+        this.kickTimer = 0.22;
+        this.currentKickDamage = kickDamage;
+    }
+
+    // los efectos y como se gestiona
+
+    public void applyEffect(Effect newEffect) {
+        if (this.activeEffect != null) {
+            this.activeEffect.onExpire(this);
+        }
+        this.activeEffect = newEffect;
+        if (this.activeEffect != null) {
+            this.activeEffect.onApply(this);
+        }
+    }
+
+    public void resetModifiers() {
+        this.speedMultiplier = 1.0;
+        this.canJump = true;
+        this.incapacitated = false;
+        this.kicking = false;
+        this.kickTimer = 0.0;
+    }
+
+    // el update para match
+
+    @Override
+    public void update(double dt) {
+        if (this.kicking) {
+            this.kickTimer -= dt;
+            if (this.kickTimer <= 0.0) {
+                this.kicking = false;
+                this.kickTimer = 0.0;
+            }
+        }
+
+        if (this.activeEffect != null) {
+            this.activeEffect.update(dt, this);
+            if (this.activeEffect.isExpired()) {
+                this.activeEffect = null;
+            }
+        }
+    }
+
+    public boolean isOnGround() {
+        double bottomY = getY() + (this.logicalHeight / 2.0);
+        return bottomY >= (this.groundLevelY - 4.0) && Math.abs(this.body.getLinearVelocity().y) < 0.2;
+    }
+
+    /**
+     * Ejecuta el tiro de poder específico del país cuando el jugador con aura toca el balón.
+     */
+    public abstract void executeSpecialShot(Ball ball, Match match);
+
+    // lo de collidable
+
+    @Override
+    public void collideWithBall(Ball ball, BodyFixture myFixture, Match match) {
+        if (ball.isFake()) {
+            match.removeFakeBall(ball);
+            return;
+        }
+        Player me = match.getOwnerOf(this);
+        if (ball.hasActivePower() && ball.getPowerOwner() != null && ball.getPowerOwner() != me) {
+            ball.getActivePower().onHitRival(ball.getPowerOwner(), me);
+            ball.clearPowerShot();
+        }
+    }
+
+    @Override
+    public void postSolveWithBall(Ball ball, Match match) {
+        if (ball.isFake()) {
+            return;
+        }
+        Player me = match.getOwnerOf(this);
+        if (me == null) {
+            return;
+        }
+
+        if (me.isPowerReady()) {
+            me.consumePower();
+            executeSpecialShot(ball, match);
+            ball.activatePowerShot(this.specialPower, me);
+        } else if (this.kicking) {
+            double dirX = this.facingRight ? 1.0 : -1.0;
+            double speedX = dirX * (7.5 + 0.45 * me.getEffectiveKick());
+            ball.launch(speedX, -4.2);
+        }
+    }
+
+    // getters y setters
+
+    public String getCountry() { return country; }
+    public Power getSpecialPower() { return specialPower; }
+    public Effect getActiveEffect() { return activeEffect; }
+    public boolean isFacingRight() { return facingRight; }
+    public boolean isKicking() { return kicking; }
+    public double getCurrentKickDamage() { return currentKickDamage; }
+
+    public void setSpeedMultiplier(double speedMultiplier) { this.speedMultiplier = speedMultiplier; }
+    public void setCanJump(boolean canJump) { this.canJump = canJump; }
+    public void setIncapacitated(boolean incapacitated) { this.incapacitated = incapacitated; }
+}
