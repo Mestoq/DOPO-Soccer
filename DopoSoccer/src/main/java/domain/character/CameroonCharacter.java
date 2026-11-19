@@ -1,7 +1,5 @@
 package domain.character;
 
-import domain.DopoSoccerException;
-import domain.power.LightningPower;
 import domain.power.Power;
 import domain.match.Match;
 import domain.physics.Ball;
@@ -9,15 +7,7 @@ import domain.physics.Ball;
 public class CameroonCharacter extends Character_ {
 
     public CameroonCharacter() {
-        super("CAMERUN", createPowerSafe("RAYO"));
-    }
-
-    private static Power createPowerSafe(String name) {
-        try {
-            return Power.create(name);
-        } catch (DopoSoccerException e) {
-            return new LightningPower();
-        }
+        super("CAMERUN", Power.create("RAYO"));
     }
 
     @Override

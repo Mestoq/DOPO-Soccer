@@ -16,9 +16,12 @@ public class LightningPower extends Power {
     public void launchShot(Ball ball, Character_ shooter, Match match) {
         this.activeShotInAir = true;
         double dir = shooter.isFacingRight() ? 1.0 : -1.0;
-        // Tiro recto potente cubierto de electricidad
+        // Tiro recto
         ball.launch(dir * 15.0, -1.2);
     }
+
+    @Override
+    public double getGravityScale() { return 0.0; }
 
     @Override
     public Effect createImpactEffect() {

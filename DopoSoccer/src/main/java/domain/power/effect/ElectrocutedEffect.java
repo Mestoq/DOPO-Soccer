@@ -11,7 +11,7 @@ public class ElectrocutedEffect extends Effect {
     @Override
     public void onApply(Character_ target) {
         target.setCanJump(false);
-        target.setSpeedMultiplier(0.5); // Reduce velocidad al 50%
+        target.setSpeedMultiplier(0.5);
     }
 
     @Override

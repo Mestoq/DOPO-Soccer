@@ -15,7 +15,7 @@ public class Goal extends GameObject {
     private BodyFixture crossbarFixture;
 
     /**
-     * @param leftSide true para el arco izquierdo (defendido por P1), false para el derecho (P2).
+     *  true para el arco izquierdo (defendido por P1), false para el derecho (P2).
      */
     public Goal(boolean leftSide, double width, double height) {
         super(width, height);
@@ -33,7 +33,7 @@ public class Goal extends GameObject {
 
         double wMeters = width / PIXELS_PER_METER;
         double hMeters = height / PIXELS_PER_METER;
-        double crossbarThickness = 0.14; // 14 px lógicos de grosor de travesaño
+        double crossbarThickness = 0.14;
 
         // 1. Travesaño superior (sólido, con buen rebote)
         Rectangle crossbarRect = Geometry.createRectangle(wMeters, crossbarThickness);
@@ -76,6 +76,8 @@ public class Goal extends GameObject {
             } else {
                 match.onGoalScored(!this.leftSide);
             }
+        } else if (!ball.isFake() && ball.hasActivePower()) {
+            ball.clearPowerShot();
         }
     }
 

@@ -15,17 +15,18 @@ public class PushEffect extends Effect {
     @Override
     public void onApply(Character_ target) {
         target.setIncapacitated(true);
+        target.setVelocityLocked(true);
         double pushVelocity = pushRight ? 11.0 : -11.0;
         target.getBody().setLinearVelocity(new Vector2(pushVelocity, -2.5));
     }
 
     @Override
     public void onTick(double dt, Character_ target) {
-        // Mantiene el impulso de retroceso durante la ventana del efecto
     }
 
     @Override
     public void onExpire(Character_ target) {
+        target.setVelocityLocked(false);
         target.setIncapacitated(false);
         target.stopHorizontal();
     }

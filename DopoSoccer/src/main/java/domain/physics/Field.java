@@ -103,10 +103,12 @@ public class Field implements Collidable {
 
     @Override
     public void collideWithBall(Ball ball, BodyFixture myFixture, Match match) {
-        if (isGroundFixture(myFixture)) {
-            if (ball.isFake()) {
-                match.removeFakeBall(ball);
-            } else if (ball.hasActivePower()) {
+        if (ball.isFake()) {
+            return;
+        }
+        if (ball.hasActivePower()) {
+            boolean ground = isGroundFixture(myFixture);
+            if (!ground || ball.getActivePower().endsOnGroundContact()) {
                 ball.clearPowerShot();
             }
         }

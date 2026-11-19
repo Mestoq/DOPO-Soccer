@@ -1,7 +1,6 @@
 package domain.character;
 
-import domain.DopoSoccerException;
-import domain.power.effect.IllusionPower;
+
 import domain.power.Power;
 import domain.match.Match;
 import domain.physics.Ball;
@@ -9,15 +8,7 @@ import domain.physics.Ball;
 public class UsaCharacter extends Character_ {
 
     public UsaCharacter() {
-        super("ESTADOS UNIDOS", createPowerSafe("ILUSION"));
-    }
-
-    private static Power createPowerSafe(String name) {
-        try {
-            return Power.create(name);
-        } catch (DopoSoccerException e) {
-            return new IllusionPower();
-        }
+        super("ESTADOS UNIDOS", Power.create("ILUSION"));
     }
 
     @Override

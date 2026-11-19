@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import domain.DopoSoccerException;
 import domain.character.Character_;
 import domain.physics.Ball;
 import domain.physics.Collidable;
@@ -26,8 +27,8 @@ public abstract class Match {
 
     protected double goalResetTimer;
     protected boolean waitingAfterGoal;
+    private ContactListenerAdapter<Body> contactListener;
 
-    // En Match.java
     protected Match(Field field, Player player1, Player player2, InGameInfo gameInfo) {
         this.field = field;
         this.player1 = player1;
@@ -72,19 +73,14 @@ public abstract class Match {
      * Registra el listener de colisiones de dyn4j para goles, patadas, tiros de poder y suelo.
      */
     private void registerContactListener() {
-        field.getWorld().addContactListener(new ContactListenerAdapter<Body>() {
+        this.contactListener = new ContactListenerAdapter<Body>() {
             @Override
             public void begin(ContactCollisionData<Body> collision, Contact contact) {
-                if (waitingAfterGoal || gameInfo.isFinished()) {
-                    return;
-                }
-                Collidable c1 = (Collidable) collision.getBody1().getUserData();
-                Collidable c2 = (Collidable) collision.getBody2().getUserData();
+                dispatchContact(collision);
+            }
 
-                if (c1 != null && c2 != null) {
-                    c1.onCollisionBegin(c2, collision.getFixture1(), collision.getFixture2(), Match.this);
-                    c2.onCollisionBegin(c1, collision.getFixture2(), collision.getFixture1(), Match.this);
-                }
+            public void sensed(ContactCollisionData<Body> collision, Contact contact) {
+                dispatchContact(collision);
             }
 
             @Override
@@ -97,11 +93,30 @@ public abstract class Match {
                     c2.onCollisionPostSolve(c1, Match.this);
                 }
             }
-        });
+        };
+        field.getWorld().addContactListener(this.contactListener);
     }
 
+    private void dispatchContact(ContactCollisionData<Body> collision) {
+        if (waitingAfterGoal || gameInfo.isFinished()) {
+            return;
+        }
+        Collidable c1 = (Collidable) collision.getBody1().getUserData();
+        Collidable c2 = (Collidable) collision.getBody2().getUserData();
+
+        if (c1 != null && c2 != null) {
+            c1.onCollisionBegin(c2, collision.getFixture1(), collision.getFixture2(), this);
+            c2.onCollisionBegin(c1, collision.getFixture2(), collision.getFixture1(), this);
+        }
+    }
 
     public void onGoalScored(boolean scoredByPlayer1) {
+        //actualiza todo lo relacionado con los goles para los jugadores
+        Player scorer   = scoredByPlayer1 ? player1 : player2;
+        Player conceder = scoredByPlayer1 ? player2 : player1;
+        scorer.addGoal();
+        conceder.onGoalConceded();
+
         if (scoredByPlayer1) {
             gameInfo.addGoalPlayer1();
         } else {
@@ -113,7 +128,7 @@ public abstract class Match {
 
         if (!gameInfo.isFinished()) {
             this.waitingAfterGoal = true;
-            this.goalResetTimer = 1.5; // Pausa breve de celebración antes de reubicar al centro
+            this.goalResetTimer = 1.5; // Pausa  antes de reubicar al centro
         }
     }
 
@@ -144,7 +159,7 @@ public abstract class Match {
             return;
         }
 
-        // 1. Pausa tras gol antes de reiniciar al centro
+        // la pausa
         if (waitingAfterGoal) {
             goalResetTimer -= dt;
             field.stepPhysics(dt);
@@ -155,15 +170,19 @@ public abstract class Match {
             return;
         }
 
-        // Actualizar jugadores (barra de poder, aturdimiento e IA)
+        // Actualiza stats inGame
         player1.update(dt, this);
         player2.update(dt, this);
 
-        // Actualizar personajes (patada y efectos activos)
+        // Actualizar personajes
         if (player1.getCharacter() != null) player1.getCharacter().update(dt);
         if (player2.getCharacter() != null) player2.getCharacter().update(dt);
 
-        // Actualizar balones (principal y falsos de Ilusión)
+
+        resolveKickDamage(player1, player2);
+        resolveKickDamage(player2, player1);
+
+        // Actualizar balones
         Iterator<Ball> it = activeBalls.iterator();
         while (it.hasNext()) {
             Ball b = it.next();
@@ -177,8 +196,21 @@ public abstract class Match {
         // Avanzar simulación física en dyn4j
         field.stepPhysics(dt);
 
-        // Actualizar cronómetro y condición de victoria (definida por TimeMatch / GoalMatch)
+        // Actualizar cronómetro y condición de victoria
         updateModeRules(dt);
+    }
+
+    // Se evalúa cada frame durante la patada y evalua quue aplica   y se aplica una sola vez (kickResolved).
+    private void resolveKickDamage(Player attacker, Player victim) {
+        Character_ a = attacker.getCharacter();
+        Character_ v = victim.getCharacter();
+        if (a == null || v == null || !a.isKickDamagePending()) {
+            return;
+        }
+        if (a.isInKickRange(v)) {
+            victim.takeDamage(a.getCurrentKickDamage()); // 10 × multiplicadorKick
+            a.markKickResolved();
+        }
     }
 
     //  utilidades para poderes y la Cpu
@@ -211,6 +243,42 @@ public abstract class Match {
         if (player1.getCharacter() == character) return player1;
         if (player2.getCharacter() == character) return player2;
         return null;
+    }
+
+
+    public void disposeOldField() {
+        field.getWorld().removeContactListener(this.contactListener);
+        for (Ball b : activeBalls) {
+            b.detachFromWorld();
+        }
+        activeBalls.clear();
+        if (player1.getCharacter() != null) player1.getCharacter().detachFromWorld();
+        if (player2.getCharacter() != null) player2.getCharacter().detachFromWorld();
+    }
+
+
+    public Player getWinner() {
+        int w = gameInfo.getWinnerNumber();
+        return (w == 1) ? player1 : (w == 2) ? player2 : null;
+    }
+
+    public String getResultMessage() {
+        if (!gameInfo.isFinished()) {
+            throw new DopoSoccerException(DopoSoccerException.MATCH_NOT_FINISHED);
+        }
+        Player winner = getWinner();
+        StringBuilder sb = new StringBuilder();
+        sb.append(winner == null ? "Empate" : "Ganador: " + winner.getName());
+        sb.append(" (").append(gameInfo.getPlayer1Goals()).append(" - ").append(gameInfo.getPlayer2Goals()).append("). Puntos: ");
+        boolean first = true;
+        if (player1.isHuman()) {
+            sb.append(player1.getName()).append(" +").append(gameInfo.getPointsFor(1));
+            first = false;
+        }
+        if (player2.isHuman()) {
+            sb.append(first ? "" : " | ").append(player2.getName()).append(" +").append(gameInfo.getPointsFor(2));
+        }
+        return sb.toString();
     }
 
     // Métodos abstractos implementados por TimeMatch y GoalMatch

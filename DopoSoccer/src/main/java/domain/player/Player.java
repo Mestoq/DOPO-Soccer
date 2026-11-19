@@ -138,12 +138,16 @@ public abstract class Player {
 
 
     public void update(double dt, Match match) {
-            // Controlamos el aturdimiento teniendo 3 segundos sin moverse y al terminar recupera vida máxima)
+            // Controlamos el aturdimiento teniendo 3 segundos sin moverse y al terminar recupera vida máxima
         if (this.stunTimer > 0.0) {
             this.stunTimer -= dt;
             if (this.stunTimer <= 0.0) {
                 this.stunTimer = 0.0;
                 this.currentHealth = getMaxHealth();
+                // [FIX 6] Al terminar el aturdimiento el personaje vuelve a poder actuar.
+                if (this.character != null) {
+                    this.character.setStunned(false);
+                }
             }
         }
 
@@ -196,10 +200,27 @@ public abstract class Player {
         this.currentHealth = Math.max(0.0, this.currentHealth - damage);
         if (this.currentHealth == 0.0) {
             this.stunTimer = STUN_DURATION_SECONDS;
+            if (this.character != null) {
+                this.character.setStunned(true);
+            }
+        }
+        this.currentHealth = Math.max(0.0, this.currentHealth - damage);
+        if (this.currentHealth == 0.0) {
+            this.stunTimer = STUN_DURATION_SECONDS;
         }
     }
-
     public abstract void decideAction(double dt, Match match);
+
+    public void restoreMatchState(int goals, double health, double powerBar, boolean aura, double stunTimer) {
+        this.goals = Math.max(0, goals);
+        this.currentHealth = Math.max(0.0, Math.min(getMaxHealth(), health));
+        this.powerBar = Math.max(0.0, Math.min(100.0, powerBar));
+        this.powerAuraActive = aura;
+        this.stunTimer = Math.max(0.0, stunTimer);
+        if (this.character != null) {
+            this.character.setStunned(this.stunTimer > 0.0);
+        }
+    }
 
 
 
@@ -228,6 +249,8 @@ public abstract class Player {
         this.currentHealth = getMaxHealth();
     }
 
+
+    public String getAiProfile() { return null; }
     public int getGoals() { return goals; }
     public double getCurrentHealth() { return currentHealth; }
     public double getPowerBar() { return powerBar; }

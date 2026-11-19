@@ -6,7 +6,6 @@ import domain.match.Match;
 import domain.physics.Ball;
 import domain.player.Player;
 import domain.power.effect.Effect;
-import domain.power.effect.IllusionPower;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,4 +81,6 @@ public abstract class Power {
     public boolean isActiveShotInAir() { return activeShotInAir; }
     public String getPowerName() { return powerName; }
     public double getBaseDamage() { return baseDamage; }
+    public double getGravityScale() { return 1.0; }
+    public boolean endsOnGroundContact() { return true; }
 }

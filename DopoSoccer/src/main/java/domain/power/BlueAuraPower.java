@@ -19,11 +19,12 @@ public class BlueAuraPower extends Power {
         this.shotRight = shooter.isFacingRight();
         this.activeShotInAir = true;
         double dir = shotRight ? 1.0 : -1.0;
-        // Tiro recto horizontal a muy alta velocidad
+        // Tiro recto horizontal mas veloz
         ball.launch(dir * 16.5, -0.5);
     }
 
-
+    @Override
+    public double getGravityScale() { return 0.0; }
 
     @Override
     public Effect createImpactEffect() {

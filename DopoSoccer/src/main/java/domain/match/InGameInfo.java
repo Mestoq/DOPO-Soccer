@@ -14,6 +14,13 @@ public class InGameInfo {
 
     private boolean paused;
     private boolean finished;
+    private boolean suddenDeath;
+
+    public static final int POINTS_WINNER = 100;
+    public static final int POINTS_LOSER = 25;
+    public static final int POINTS_DRAW = 50;
+
+
 
     private InGameInfo(boolean timeMode, double durationSeconds, int targetGoals) {
         this.timeMode = timeMode;
@@ -92,17 +99,27 @@ public class InGameInfo {
     }
 
     /**
-     * Calcula los puntos ganados por el Jugador 1 al finalizar el partido
+     * asigna puntos ganados por el Jugador 1 o 2 al finalizar el partido
      * (100 pts por gol anotado + 300 pts por victoria o 100 pts por empate).
      */
-    public int calculatePlayer1EarnedPoints() {
-        int points = this.player1Goals * 100;
-        if (this.player1Goals > this.player2Goals) {
-            points += 300;
-        } else if (this.player1Goals == this.player2Goals) {
-            points += 100;
+
+    public int getPointsFor(int playerNumber) {
+        int winner = getWinnerNumber();
+        if (winner == 0) {
+            return POINTS_DRAW;
         }
-        return points;
+        return (winner == playerNumber) ? POINTS_WINNER : POINTS_LOSER;
+    }
+
+    // Se conserva el nombre por compatibilidad con la GUI.
+    public int calculatePlayer1EarnedPoints() {
+        return getPointsFor(1);
+    }
+
+    public int getWinnerNumber() {
+        if (player1Goals > player2Goals) return 1;
+        if (player2Goals > player1Goals) return 2;
+        return 0;
     }
 
     /**
@@ -112,8 +129,19 @@ public class InGameInfo {
         if (saveFile == null || !finished) {
             return;
         }
-        saveFile.addPoints(calculatePlayer1EarnedPoints());
         saveFile.recordMatchStats(this.player1Goals, this.player2Goals, this.player1Goals > this.player2Goals);
+    }
+
+    public void startSuddenDeath() { this.suddenDeath = true; }
+    public boolean isSuddenDeath() { return suddenDeath; }
+
+    //para la persistencia
+    public void restoreState(int player1Goals, int player2Goals, double remainingTime, double elapsedTime) {
+        this.player1Goals = Math.max(0, player1Goals);
+        this.player2Goals = Math.max(0, player2Goals);
+        this.remainingTime = Math.max(0.0, remainingTime);
+        this.elapsedTime = Math.max(0.0, elapsedTime);
+        this.finished = false;
     }
 
     // getters

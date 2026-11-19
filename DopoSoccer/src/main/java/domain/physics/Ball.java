@@ -3,6 +3,7 @@ package domain.physics;
 import domain.match.Match;
 import domain.player.Player;
 import domain.power.Power;
+import org.dyn4j.collision.CategoryFilter;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Geometry;
@@ -16,9 +17,12 @@ public class Ball extends GameObject {
     private final boolean fake;
     private double fakeRemainingTime;
 
+
     // Estado cuando el balón viaja con algun efecto de un tiro especial
     private Power activePower;
     private Player powerOwner;
+
+    private static final double MIN_POWER_SHOT_SPEED = 2.0;
 
     /**
      * Constructor principal para el balón real del partido.
@@ -51,17 +55,26 @@ public class Ball extends GameObject {
 
         double radiusMeters = radius / PIXELS_PER_METER;
         BodyFixture ballFixture = new BodyFixture(Geometry.createCircle(radiusMeters));
-        ballFixture.setDensity(1.2);      // Ligero para volar bien al patear o cabecear
-        ballFixture.setFriction(0.15);    // Permite rodar con efecto sin frenarse en seco
-        ballFixture.setRestitution(0.78); // Rebote poco realista pa que no sea aburrido
+        ballFixture.setDensity(1.2);
+        ballFixture.setFriction(0.15);
+        ballFixture.setRestitution(0.78);
+
+
+        if (this.fake) {
+            ballFixture.setFilter(new CategoryFilter(CATEGORY_FAKE, CATEGORY_WORLD));
+        } else {
+            ballFixture.setFilter(new CategoryFilter(CATEGORY_PLAYABLE, Long.MAX_VALUE));
+        }
 
         this.body.addFixture(ballFixture);
-        this.body.setMass(MassType.NORMAL);      // Rotación libre para que gire al moverse
-        this.body.setLinearDamping(0.08);        // Resistencia mínima del aire
+        this.body.setMass(MassType.NORMAL);
+        this.body.setLinearDamping(0.08);
         this.body.setAngularDamping(0.20);
 
         attachToWorld(world, startX, startY);
     }
+
+
 
     /**
      * Aplica un impulso de patada o cabezazo en unidades de velocidad .
@@ -78,6 +91,8 @@ public class Ball extends GameObject {
     public void activatePowerShot(Power power, Player owner) {
         this.activePower = power;
         this.powerOwner = owner;
+
+        this.body.setGravityScale(power.getGravityScale());
     }
 
     /**
@@ -89,6 +104,7 @@ public class Ball extends GameObject {
         }
         this.activePower = null;
         this.powerOwner = null;
+        this.body.setGravityScale(1.0); // [FIX 12] el balón vuelve a la gravedad normal
     }
 
     /**
@@ -103,6 +119,9 @@ public class Ball extends GameObject {
     public void update(double dt) {
         if (this.fake) {
             this.fakeRemainingTime -= dt;
+        } else if (this.activePower != null
+                && this.body.getLinearVelocity().getMagnitude() < MIN_POWER_SHOT_SPEED) {
+            clearPowerShot();
         }
     }
 

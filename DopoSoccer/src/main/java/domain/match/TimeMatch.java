@@ -12,12 +12,21 @@ public class TimeMatch extends Match {
     @Override
     protected void updateModeRules(double dt) {
         gameInfo.updateTimer(dt);
-        if (gameInfo.getRemainingTime() <= 0.0) {
-            gameInfo.finishMatch();
+
+        // muerte súbita; si no, gana el que tenga más goles.
+        if (!gameInfo.isSuddenDeath() && gameInfo.getRemainingTime() <= 0.0) {
+            if (gameInfo.getPlayer1Goals() == gameInfo.getPlayer2Goals()) {
+                gameInfo.startSuddenDeath();
+            } else {
+                gameInfo.finishMatch();
+            }
         }
     }
 
     @Override
     protected void checkEndCondition() {
+        if (gameInfo.isSuddenDeath()) {
+            gameInfo.finishMatch();
+        }
     }
 }

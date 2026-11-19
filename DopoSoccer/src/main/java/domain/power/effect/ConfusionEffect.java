@@ -3,15 +3,20 @@ package domain.power.effect;
 import domain.character.Character_;
 
 public class ConfusionEffect extends Effect {
+    public static final double DURATION = 2.5;
 
     public ConfusionEffect() {
-        super("Confusión", 2.5);
+        super("Confusión", DURATION);
     }
 
     @Override
     public void onApply(Character_ target) {
-        // Invierte brevemente la percepción o mantiene el estado visual de confusión en HUD
+        //no se aun que hacer en esto :p
     }
+
+
+
+
 
     @Override
     public void onTick(double dt, Character_ target) {

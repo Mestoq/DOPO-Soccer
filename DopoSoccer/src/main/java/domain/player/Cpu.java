@@ -3,6 +3,8 @@ package domain.player;
 import domain.match.Match;
 import domain.physics.Ball;
 import domain.physics.Field;
+import domain.ErrorLog;
+import domain.DopoSoccerException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,12 +46,17 @@ public class Cpu extends Player {
     }
 
     public void setProfile(String profile) {
-        if (profile == null || !strategies.containsKey(profile.trim().toUpperCase())) {
+        String key = (profile == null) ? null : profile.trim().toUpperCase();
+        if (key == null || !strategies.containsKey(key)) {
+            ErrorLog.warn(DopoSoccerException.INVALID_PROFILE_DEFAULT_CLUMSY + profile);
             this.profile = PROFILE_CLUMSY;
         } else {
-            this.profile = profile.trim().toUpperCase();
+            this.profile = key;
         }
     }
+
+    @Override
+    public String getAiProfile() { return profile; }
 
     public String getProfile() {
         return profile;

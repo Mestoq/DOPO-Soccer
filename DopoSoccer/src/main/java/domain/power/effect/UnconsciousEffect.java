@@ -1,7 +1,6 @@
-package domain.power;
+package domain.power.effect;
 
 import domain.character.Character_;
-import domain.power.effect.Effect;
 import org.dyn4j.geometry.Vector2;
 
 public class UnconsciousEffect extends Effect {
@@ -14,7 +13,7 @@ public class UnconsciousEffect extends Effect {
     public void onApply(Character_ target) {
         target.setIncapacitated(true);
         target.setCanJump(false);
-        // Lanza al rival por los aires
+        // Lanza al rival
         target.getBody().setLinearVelocity(new Vector2(0.0, -8.5));
     }
 
