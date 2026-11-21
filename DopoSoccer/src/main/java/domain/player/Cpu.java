@@ -74,7 +74,7 @@ public class Cpu extends Player {
             return;
         }
 
-        // Si tiene la barra llena, activa el poder automáticamente (salvo el perfil Torpe que lo hace al azar)
+        // Si tiene la barra llena, activa el poder automáticamente (excepto el torpe que lo hace al azar)
         if (!PROFILE_CLUMSY.equals(this.profile) && this.powerBar >= 100.0 && !this.powerAuraActive) {
             activatePower();
         }
