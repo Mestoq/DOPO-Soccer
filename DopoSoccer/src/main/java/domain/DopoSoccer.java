@@ -17,6 +17,8 @@ public class DopoSoccer{
    private SaveFile currentSaveFile;
    private ArrayList <String> characterRoster = new ArrayList<>();
    private final Map<String, MatchFactory> matchFactories = new HashMap<>();
+   private boolean saveLoaded;
+
 
     public DopoSoccer(SaveFile loadedFile) {
         this.currentMatch = null;
@@ -27,9 +29,11 @@ public class DopoSoccer{
         if (loadedFile == null || !loadedFile.getStatus()) {
             this.currentSaveFile = new SaveFile();
             this.characterRoster = this.currentSaveFile.getUnlockedCharecters();
+            this.saveLoaded = false;
         } else {
             this.currentSaveFile = loadedFile;
             this.characterRoster = loadedFile.getUnlockedCharecters();
+            this.saveLoaded = true;
         }
     }
     public void preFixPlayers(Player player1, Player player2) {
@@ -93,9 +97,27 @@ public class DopoSoccer{
         return this.currentMatch;
     }
 
+    public void loadSave(File file) throws DopoSoccerException {
+        SaveFile loaded = SaveFile.abrir(file);
+        if (loaded == null || !loaded.getStatus()) {
+            throw new DopoSoccerException("El archivo de progreso no es válido.");
+        }
+        this.currentSaveFile = loaded;
+        this.characterRoster = loaded.getUnlockedCharecters();
+        this.saveLoaded = true;
+    }
+
+    /**
+     * Guarda el progreso actual (puntos, estadísticas y personajes) en el archivo indicado.
+     */
+    public void saveProgress(File file) throws DopoSoccerException {
+        currentSaveFile.guardar(file);
+    }
+
+
     private void applySaveFileProgress(Player character) {
         // Aquí transferiremos las mejoras de currentSaveFile hacia player / su Character
     }
-
+    public boolean isSaveLoaded() { return saveLoaded; }
 
 }
