@@ -121,10 +121,6 @@ public class DopoSoccerGUI extends JFrame implements AudioPlay, PanelRotation, R
     }
 
     // Tamaño de la ventana
-
-    /**
-     * Define el tamaño que debe tener la ventana mientras el panel indicado esté visible.
-     */
     public void setPanelSize(String name, int width, int height) {
         panelSize.put(name, new Dimension(width, height));
     }
@@ -135,6 +131,11 @@ public class DopoSoccerGUI extends JFrame implements AudioPlay, PanelRotation, R
     @Override
     public void setGameResolution(int width, int height) {
         setPanelSize(GAME_PANEL, width, height);
+    }
+
+    @Override
+    public Dimension getGameResolution() {
+        return panelSize.getOrDefault(GAME_PANEL, new Dimension(MENU_WIDTH, MENU_HEIGHT));
     }
 
     private void applyWindowSize(String panelName) {
@@ -275,9 +276,8 @@ public class DopoSoccerGUI extends JFrame implements AudioPlay, PanelRotation, R
             gui.addPanel(START_PANEL, new StartPanel(gui, gui), "/audio/music/start.wav");
             gui.addPanel(MENU_CONFIG_PANEL, new MenuConfigPanel(gui, gui, gui, dopo), "/audio/music/menu.wav");
             gui.addPanel(WHO_VS_WHO_PANEL, new WhoVsWhoPanel(gui, gui), "/audio/music/menu.wav");
-            // Pendientes (se habilitan al crear cada panel):
-            // gui.addPanel(MATCH_MODE_PANEL, new MatchModePanel(gui, gui), "/audio/music/menu.wav");
-            // gui.addPanel(CHARACTER_PANEL,  new CharacterPanel(gui, gui),  "/audio/music/character.wav");
+            gui.addPanel(MATCH_MODE_PANEL, new MatchModePanel(gui, gui), "/audio/music/menu.wav");
+            gui.addPanel(CHARACTER_PANEL,  new CharacterPanel(gui, gui),  "/audio/music/character.wav");
             // gui.addPanel(GAME_PANEL,       new GamePanel(gui, gui),       "/audio/music/game.wav");
             // gui.addAuxiliaryPanel(STORE_PANEL, new StorePanel(gui, gui), "/audio/music/menu.wav");
 
