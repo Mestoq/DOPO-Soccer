@@ -3,6 +3,7 @@ package presentation;
 import domain.DopoSoccer;
 import domain.DopoSoccerException;
 import domain.ErrorLog;
+import domain.match.MatchSnapshot;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -45,12 +46,15 @@ public class MenuConfigPanel extends JPanel {
 
     private MenuButton loadMatchButton;
     private int resolutionIndex;
+    private final GamePanel gamePanel;
 
-    public MenuConfigPanel(PanelRotation rotation, AudioPlay audio, ResolutionSetting resolution, DopoSoccer game) {
+    public MenuConfigPanel(PanelRotation rotation, AudioPlay audio, ResolutionSetting resolution,
+                           DopoSoccer game, GamePanel gamePanel) {
         this.rotation = rotation;
         this.audio = audio;
         this.resolution = resolution;
         this.game = game;
+        this.gamePanel = gamePanel;
         this.background = loadImage(BACKGROUND_PATH);
         this.resolutionIndex = DEFAULT_RESOLUTION_INDEX;
 
@@ -78,7 +82,7 @@ public class MenuConfigPanel extends JPanel {
 
     private void prepareElements() {
         loadMatchButton = new MenuButton("LOAD ONGOING MATCH", this::onLoadMatch);
-        loadMatchButton.setEnabled(game.isSaveLoaded());
+        loadMatchButton.setEnabled(game.isAnySaveLoaded());
 
         addButton(new MenuButton("NEW MATCH", this::onNewGame), 0);
         addButton(new MenuButton("LOAD SAVE", this::onLoadGame), 1);
@@ -106,14 +110,18 @@ public class MenuConfigPanel extends JPanel {
 
     private void onLoadGame() {
         audio.playSound(CLICK_SOUND);
-        JFileChooser chooser = createChooser("Load a Save");
+        String profile = askProfile("Cargar partida");
+        if (profile == null) {
+            return;
+        }
+        JFileChooser chooser = createChooser("Cargar partida");
         if (chooser.showOpenDialog(SwingUtilities.getWindowAncestor(this)) != JFileChooser.APPROVE_OPTION) {
             return;
         }
         try {
-            game.loadSave(chooser.getSelectedFile());
-            loadMatchButton.setEnabled(true);
-            showMessage("Save Loaded", JOptionPane.INFORMATION_MESSAGE);
+            game.loadSave(profile, chooser.getSelectedFile());
+            loadMatchButton.setEnabled(game.isAnySaveLoaded());
+            showMessage("Progreso cargado", JOptionPane.INFORMATION_MESSAGE);
         } catch (DopoSoccerException e) {
             showMessage(e.getMessage(), JOptionPane.ERROR_MESSAGE);
         }
@@ -121,27 +129,45 @@ public class MenuConfigPanel extends JPanel {
 
     private void onSaveGame() {
         audio.playSound(CLICK_SOUND);
-        JFileChooser chooser = createChooser("Save Progress");
+        String profile = askProfile("Guardar partida");
+        if (profile == null) {
+            return;
+        }
+        JFileChooser chooser = createChooser("Guardar partida");
         if (chooser.showSaveDialog(SwingUtilities.getWindowAncestor(this)) != JFileChooser.APPROVE_OPTION) {
             return;
         }
         File file = withExtension(chooser.getSelectedFile());
         try {
-            game.saveProgress(file);
-            showMessage("Progress Saved", JOptionPane.INFORMATION_MESSAGE);
+            game.saveProgress(profile, file);
+            showMessage("Progreso guardado", JOptionPane.INFORMATION_MESSAGE);
         } catch (DopoSoccerException e) {
             showMessage(e.getMessage(), JOptionPane.ERROR_MESSAGE);
         }
     }
 
+
+
     private void onLoadMatch() {
         audio.playSound(CLICK_SOUND);
-        // Pendiente: se conectará con la carga del partido (MatchSnapshot)
+        JFileChooser chooser = createChooser("Cargar partido");
+        if (chooser.showOpenDialog(SwingUtilities.getWindowAncestor(this)) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        try {
+            MatchSnapshot snapshot = MatchSnapshot.abrir(chooser.getSelectedFile());
+            // La ventana toma el tamaño de la cancha con que se guardó el partido
+            resolution.setGameResolution((int) snapshot.getFieldWidth(), (int) snapshot.getFieldHeight());
+            gamePanel.loadMatch(snapshot);
+            rotation.goTo(DopoSoccerGUI.GAME_PANEL);
+        } catch (DopoSoccerException e) {
+            showMessage(e.getMessage(), JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onStore() {
         audio.playSound(CLICK_SOUND);
-        // Pendiente: se conectará con el panel de la tienda
+        rotation.goTo(DopoSoccerGUI.STORE_PANEL);
     }
 
     private void onResolution() {
@@ -183,6 +209,23 @@ public class MenuConfigPanel extends JPanel {
         chooser.setDialogTitle(title);
         chooser.setFileFilter(SAVE_FILTER);
         return chooser;
+    }
+
+    private String askProfile(String title) {
+        String[] options = {"JUGADOR 1", "JUGADOR 2"};
+        int choice = JOptionPane.showOptionDialog(
+                SwingUtilities.getWindowAncestor(this),
+                "Selecciona el jugador dueño del perfil",
+                title,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if (choice < 0) {
+            return null;
+        }
+        return choice == 0 ? DopoSoccer.PLAYER_1 : DopoSoccer.PLAYER_2;
     }
 
     private File withExtension(File file) {
