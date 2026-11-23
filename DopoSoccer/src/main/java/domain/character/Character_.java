@@ -100,6 +100,7 @@ public abstract class Character_ extends GameObject {
         this.body.addFixture(mainFixture);
 
         this.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
+        this.body.setAtRestDetectionEnabled(false);
 
         attachToWorld(world, startX, startY);
     }

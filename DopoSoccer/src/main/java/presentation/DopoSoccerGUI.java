@@ -271,15 +271,27 @@ public class DopoSoccerGUI extends JFrame implements AudioPlay, PanelRotation, R
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             DopoSoccerGUI gui = new DopoSoccerGUI();
-            DopoSoccer dopo = new DopoSoccer(null);
+            DopoSoccer dopo = new DopoSoccer(); // sin parámetros: cada jugador crea su propio perfil
 
+            // Paneles cuyas elecciones lee GamePanel
+            WhoVsWhoPanel whoVsWho = new WhoVsWhoPanel(gui, gui);
+            MatchModePanel matchMode = new MatchModePanel(gui, gui);
+            CharacterPanel characters = new CharacterPanel(gui, gui);
+            StorePanel store = new StorePanel(gui, gui, dopo);
+            GamePanel game = new GamePanel(gui, gui, gui, dopo, whoVsWho, matchMode, characters);
+
+            // Flujo lineal (el orden de registro define next() y back())
             gui.addPanel(START_PANEL, new StartPanel(gui, gui), "/audio/music/start.wav");
-            gui.addPanel(MENU_CONFIG_PANEL, new MenuConfigPanel(gui, gui, gui, dopo), "/audio/music/menu.wav");
-            gui.addPanel(WHO_VS_WHO_PANEL, new WhoVsWhoPanel(gui, gui), "/audio/music/menu.wav");
-            gui.addPanel(MATCH_MODE_PANEL, new MatchModePanel(gui, gui), "/audio/music/menu.wav");
-            gui.addPanel(CHARACTER_PANEL,  new CharacterPanel(gui, gui),  "/audio/music/character.wav");
-            // gui.addPanel(GAME_PANEL,       new GamePanel(gui, gui),       "/audio/music/game.wav");
-            // gui.addAuxiliaryPanel(STORE_PANEL, new StorePanel(gui, gui), "/audio/music/menu.wav");
+            gui.addPanel(MENU_CONFIG_PANEL, new MenuConfigPanel(gui, gui, gui, dopo, game), "/audio/music/menu.wav");
+            gui.addPanel(WHO_VS_WHO_PANEL, whoVsWho, "/audio/music/menu.wav");
+            gui.addPanel(MATCH_MODE_PANEL, matchMode, "/audio/music/menu.wav");
+            gui.addPanel(CHARACTER_PANEL, characters, "/audio/music/character.wav");
+            gui.addPanel(GAME_PANEL, game, "/audio/music/game.wav");
+
+
+
+            // Fuera del flujo: solo se alcanza con goTo(STORE_PANEL)
+            gui.addAuxiliaryPanel(STORE_PANEL, store, "/audio/music/menu.wav");
 
             gui.start();
         });

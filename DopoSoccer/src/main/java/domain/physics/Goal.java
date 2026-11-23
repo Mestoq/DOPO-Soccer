@@ -87,4 +87,12 @@ public class Goal extends GameObject {
         // Las porterías son estáticas en dyn4j
     }
 
+    public double getDrawX() {
+        return this.body.getTransform().getTranslationX() * PIXELS_PER_METER;
+    }
+
+    public double getDrawY() {
+        return this.body.getTransform().getTranslationY() * PIXELS_PER_METER;
+    }
+
 }

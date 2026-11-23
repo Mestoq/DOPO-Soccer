@@ -192,10 +192,22 @@ public abstract class Player {
     /**
      * Aplica daño por patada o tiro de poder. Si la vida llega a 0, el jugador queda aturdido 3 segundos.
      */
+    /**
+     * Aplica daño por patada o tiro de poder. Si la vida llega a 0, el jugador queda aturdido 3 segundos.
+     */
     public void takeDamage(double damage) {
         if (damage <= 0.0 || isStunned()) {
             return;
         }
+
+        this.currentHealth = Math.max(0.0, this.currentHealth - damage);
+        if (this.currentHealth == 0.0) {
+            this.stunTimer = STUN_DURATION_SECONDS;
+            if (this.character != null) {
+                this.character.setStunned(true);
+            }
+        }
+
 
         this.currentHealth = Math.max(0.0, this.currentHealth - damage);
         if (this.currentHealth == 0.0) {

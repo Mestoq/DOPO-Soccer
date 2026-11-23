@@ -57,7 +57,7 @@ public class Ball extends GameObject {
         BodyFixture ballFixture = new BodyFixture(Geometry.createCircle(radiusMeters));
         ballFixture.setDensity(1.2);
         ballFixture.setFriction(0.15);
-        ballFixture.setRestitution(0.78);
+        ballFixture.setRestitution(0.90);
 
 
         if (this.fake) {

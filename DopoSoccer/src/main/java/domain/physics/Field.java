@@ -60,7 +60,7 @@ public class Field implements Collidable {
         groundRect.translate(wMeters / 2.0, groundMeters + (wallThickness / 2.0));
         this.groundFixture = new BodyFixture(groundRect);
         this.groundFixture.setFriction(0.35);
-        this.groundFixture.setRestitution(0.75);
+        this.groundFixture.setRestitution(0.60);
         this.boundariesBody.addFixture(this.groundFixture);
 
         // Techo

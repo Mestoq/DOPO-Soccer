@@ -28,6 +28,8 @@ public abstract class Match {
     protected double goalResetTimer;
     protected boolean waitingAfterGoal;
     private ContactListenerAdapter<Body> contactListener;
+    private static final double CHARACTER_WIDTH_RATIO = 0.09;
+    private static final double CHARACTER_HEIGHT_RATIO = 0.26;
 
     protected Match(Field field, Player player1, Player player2, InGameInfo gameInfo) {
         this.field = field;
@@ -55,8 +57,8 @@ public abstract class Match {
         double h = field.getHeight();
         double groundY = field.getGroundLevelY();
 
-        double charW = w * 0.068;
-        double charH = h * 0.19;
+        double charW = w * CHARACTER_WIDTH_RATIO;
+        double charH = h * CHARACTER_HEIGHT_RATIO;
         double startY = groundY - (charH / 2.0);
 
         if (player1.getCharacter() != null) {

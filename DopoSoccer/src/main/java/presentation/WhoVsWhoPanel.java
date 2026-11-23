@@ -1,6 +1,9 @@
 package presentation;
 
 import domain.ErrorLog;
+import domain.player.Cpu;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -19,6 +22,11 @@ import java.net.URL;
 public class WhoVsWhoPanel extends JPanel {
 
     public enum Mode { NONE, HUMAN_VS_HUMAN, HUMAN_VS_CPU }
+
+    private static final String[] CPU_PROFILES = {
+            Cpu.PROFILE_CLUMSY, Cpu.PROFILE_OFFENSIVE, Cpu.PROFILE_DEFENSIVE, Cpu.PROFILE_EXPERT
+    };
+    private String cpuProfile = Cpu.PROFILE_CLUMSY;
 
     private static final String LEFT_PATH = "/images/whovswho/left.png";
     private static final String MIDDLE_PATH = "/images/whovswho/middle.png";
@@ -130,13 +138,42 @@ public class WhoVsWhoPanel extends JPanel {
     }
 
     private void select(Mode mode) {
-        if (selected != mode) {
-            audio.playSound(CLICK_SOUND);
-            selected = mode;
-            continueButton.setEnabled(true);
-            repaint();
+        if (selected == mode && mode != Mode.HUMAN_VS_CPU) {
+            return;
         }
+        audio.playSound(CLICK_SOUND);
+        if (mode == Mode.HUMAN_VS_CPU) {
+            String profile = askCpuProfile();
+            if (profile == null) { // se cerró el diálogo: no cambia nada
+                return;
+            }
+            cpuProfile = profile;
+        }
+        selected = mode;
+        continueButton.setEnabled(true);
+        repaint();
     }
+
+    private String askCpuProfile() {
+        int current = 0;
+        for (int i = 0; i < CPU_PROFILES.length; i++) {
+            if (CPU_PROFILES[i].equals(cpuProfile)) {
+                current = i;
+            }
+        }
+        int choice = JOptionPane.showOptionDialog(
+                SwingUtilities.getWindowAncestor(this),
+                "Selecciona el perfil de la CPU",
+                "Perfil de la CPU",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                CPU_PROFILES,
+                CPU_PROFILES[current]);
+        return choice < 0 ? null : CPU_PROFILES[choice];
+    }
+
+
 
     // Acciones de los botones
 
@@ -194,4 +231,5 @@ public class WhoVsWhoPanel extends JPanel {
         }
         g2.dispose();
     }
+    public String getCpuProfile() { return cpuProfile; }
 }
