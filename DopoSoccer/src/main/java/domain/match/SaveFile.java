@@ -81,7 +81,8 @@ public class SaveFile implements Serializable {
         if (file == null || !file.exists()) {
             throw new DopoSoccerException("El archivo de partida no existe.");
         }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+        try (FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis)){
             return SaveFile.class.cast(ois.readObject());
         } catch (ClassCastException e) {
             throw new DopoSoccerException("El archivo no corresponde a una partida válida de DopoSoccer.", e);
