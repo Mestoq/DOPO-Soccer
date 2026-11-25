@@ -17,6 +17,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static domain.DopoSoccerException.*;
+
 public class SaveFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,7 +39,7 @@ public class SaveFile implements Serializable {
     private int goalsConceded;
 
     // Personajes desbloqueados
-    private ArrayList<String> unlockedCharacters;
+    private final ArrayList<String> unlockedCharacters;
 
     /**
      * Crea un perfil nuevo por defecto (niveles en 1, 0 puntos y personajes base).
@@ -56,10 +58,10 @@ public class SaveFile implements Serializable {
         this.goalsConceded = 0;
 
         this.unlockedCharacters = new ArrayList<>(Arrays.asList(
-                "COREA DEL SUR",
-                "CAMERUN",
+                "KOREA",
+                "CAMEROON",
                 "NIGERIA",
-                "ESTADOS UNIDOS"
+                "USA"
         ));
     }
 
@@ -67,27 +69,27 @@ public class SaveFile implements Serializable {
 
     public void guardar(File file) throws DopoSoccerException {
         if (file == null) {
-            throw new DopoSoccerException("El archivo de destino no puede ser nulo.");
+            throw new DopoSoccerException(NULL_SAVEFILE);
         }
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(this);
         } catch (IOException e) {
 
-            throw new DopoSoccerException("Error al guardar la partida: " + e.getMessage(), e);
+            throw new DopoSoccerException(ERROR_SAVING + e.getMessage(), e);
         }
     }
 
     public static SaveFile abrir(File file) throws DopoSoccerException {
         if (file == null || !file.exists()) {
-            throw new DopoSoccerException("El archivo de partida no existe.");
+            throw new DopoSoccerException(NULL_SAVEFILE);
         }
         try (FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis)){
-            return SaveFile.class.cast(ois.readObject());
+            return (SaveFile) ois.readObject();
         } catch (ClassCastException e) {
-            throw new DopoSoccerException("El archivo no corresponde a una partida válida de DopoSoccer.", e);
+            throw new DopoSoccerException(INVALID_SAVEFILE_MATCH, e);
         } catch (IOException | ClassNotFoundException e) {
-            throw new DopoSoccerException("Error al exportar datos: " + e.getMessage());
+            throw new DopoSoccerException(ERROR_IMPORT + e.getMessage());
         }
     }
 
@@ -95,7 +97,7 @@ public class SaveFile implements Serializable {
 
     public void exportAs(File file) throws DopoSoccerException {
         if (file == null) {
-            throw new DopoSoccerException("El archivo de exportación no puede ser nulo.");
+            throw new DopoSoccerException(NULL_EXPORT);
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("points=" + points); writer.newLine();
@@ -109,13 +111,13 @@ public class SaveFile implements Serializable {
             writer.write("goalsConceded=" + goalsConceded); writer.newLine();
             writer.write("characters=" + String.join(",", unlockedCharacters)); writer.newLine();
         } catch (IOException e) {
-            throw new DopoSoccerException("Error al exportar datos: " + e.getMessage(), e);
+            throw new DopoSoccerException(ERROR_EXPORT+ e.getMessage(), e);
         }
     }
 
     public static SaveFile importar(File file) throws DopoSoccerException {
         if (file == null || !file.exists()) {
-            throw new DopoSoccerException("El archivo a importar no existe.");
+            throw new DopoSoccerException(NULL_IMPORT);
         }
         SaveFile loaded = new SaveFile();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -153,7 +155,7 @@ public class SaveFile implements Serializable {
             }
             return loaded;
         } catch (IOException | NumberFormatException e) {
-            throw new DopoSoccerException("Formato inválido al importar archivo: " + e.getMessage(), e);
+            throw new DopoSoccerException(INVALID_SAVEFILE + e.getMessage(), e);
         }
     }
 

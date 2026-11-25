@@ -1,10 +1,5 @@
 package domain.character;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
-
-import domain.DopoSoccerException;
 import domain.power.effect.Effect;
 import domain.player.Player;
 import domain.power.Power;
@@ -20,16 +15,6 @@ import org.dyn4j.world.World;
 import org.dyn4j.collision.CategoryFilter;
 
 public abstract class Character_ extends GameObject {
-
-    private static final Map<String, Supplier<Character_>> CHARACTER_FACTORIES = new HashMap<>();
-
-    static {
-        CHARACTER_FACTORIES.put("COREA DEL SUR",  KoreaCharacter::new);
-        CHARACTER_FACTORIES.put("CAMERUN",        CameroonCharacter::new);
-        CHARACTER_FACTORIES.put("NIGERIA",        NigeriaCharacter::new);
-        CHARACTER_FACTORIES.put("ESTADOS UNIDOS", UsaCharacter::new);
-    }
-
 
     private static final double KICK_BALL_SPEED_X = 7.95;
     private static final double KICK_BALL_SPEED_Y = -4.2;
@@ -62,20 +47,6 @@ public abstract class Character_ extends GameObject {
         this.specialPower = specialPower;
         this.activeEffect = null;
         resetModifiers();
-    }
-
-    /**
-     * con el método Factory instancia la subclase exacta según el nombre del país.
-     */
-    public static Character_ create(String countryName) throws DopoSoccerException {
-        if (countryName == null) {
-            throw new DopoSoccerException("El nombre del personaje no puede ser nulo.");
-        }
-        Supplier<Character_> factory = CHARACTER_FACTORIES.get(countryName.trim().toUpperCase());
-        if (factory == null) {
-            throw new DopoSoccerException("Personaje no disponible: " + countryName);
-        }
-        return factory.get();
     }
 
     /**
@@ -243,7 +214,7 @@ public abstract class Character_ extends GameObject {
             return;
         }
 
-        //validar cosas del powershot mas que todo respecto a donde se activa o interactua y ademas de aplicar el poder
+        // validar cosas del powershot mas que todo respecto a donde se activa o interactua y ademas de aplicar el poder
         boolean carryingMyPowerShot = ball.hasActivePower() && ball.getPowerOwner() == me;
         if (this.kicking && !this.kickResolved && !carryingMyPowerShot) {
             double dirX = this.facingRight ? 1.0 : -1.0;
@@ -268,7 +239,7 @@ public abstract class Character_ extends GameObject {
         }
     }
 
-    //  patada en el aire, osea, que aun no define que hizo
+    // patada en el aire, osea, que aun no define que hizo
     public boolean isKickDamagePending() {
         return this.kicking && !this.kickResolved;
     }
@@ -285,10 +256,10 @@ public abstract class Character_ extends GameObject {
         return dx > 0.0 && dx <= reach && dy <= this.logicalHeight * 0.75;
     }
 
-    // Para los efectos que controlan el efecto de empuje,osea,  bloquean/desbloquean los atributos
+    // Para los efectos que controlan el efecto de empuje, osea, bloquean/desbloquean los atributos
     public void setVelocityLocked(boolean velocityLocked) { this.velocityLocked = velocityLocked; }
 
-    //pa la persistencia
+    // pa la persistencia
 
     public void setFacingRight(boolean facingRight) { this.facingRight = facingRight; }
 

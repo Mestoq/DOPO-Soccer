@@ -248,26 +248,6 @@ public class MatchModePanel extends JPanel {
     }
 
 
-    /* Esto Lo dejo para reautilizar en caso de algo
-    private void drawValue(Graphics2D g2) {
-        String text = (selected == Mode.TIME) ? minutes + " MIN" : goals + (goals == 1 ? " GOL" : " GOLES");
-        int halfCenterX = (selected == Mode.TIME) ? getWidth() / 4 : (getWidth() * 3) / 4;
-
-        g2.setComposite(AlphaComposite.SrcOver);
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.setFont(valueFont);
-        FontMetrics fm = g2.getFontMetrics();
-        int textX = halfCenterX - fm.stringWidth(text) / 2;
-        int textY = getHeight() - MenuButton.BUTTON_HEIGHT - CONTINUE_BOTTOM_MARGIN - VALUE_GAP;
-
-        g2.setColor(new Color(0, 0, 0, 160)); // sombra para legibilidad
-        g2.drawString(text, textX + 2, textY + 2);
-        g2.setColor(Color.WHITE);
-        g2.drawString(text, textX, textY);
-    }
-
-     */
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -290,13 +270,5 @@ public class MatchModePanel extends JPanel {
             g2.drawImage(middle, (w - mw) / 2, 0, mw, h, null);
         }
 
-        // Valor elegido (solo con un modo seleccionado)
-        /*
-        if (selected != Mode.NONE) {
-            drawValue(g2);
-        }
-        g2.dispose();
-
-         */
     }
 }

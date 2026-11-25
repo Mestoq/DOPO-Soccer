@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.IntSupplier;
 
+import static domain.DopoSoccerException.NULL_CHARECTER_UPGRADE;
+
 public abstract class Player {
     public static final int MAX_STAT_LEVEL = 10;
     public static final int BASE_UPGRADE_COST = 500;
@@ -103,7 +105,7 @@ public abstract class Player {
 
     public void upgrade(String type) throws DopoSoccerException {
         if (type == null) {
-            throw new DopoSoccerException("El tipo de estadística a mejorar no puede ser nulo.");
+            throw new DopoSoccerException(NULL_CHARECTER_UPGRADE);
         }
 
         String key = type.trim().toUpperCase();

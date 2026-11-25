@@ -4,6 +4,7 @@ import domain.DopoSoccerException;
 import domain.character.Character_;
 import domain.physics.Ball;
 import domain.player.Player;
+import domain.character.CharacterFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +13,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+import static domain.DopoSoccerException.*;
 
 /**
  * Esta clase guarda solo datos planos del partido (marcador, tiempo, jugadores,
@@ -61,22 +64,23 @@ public class MatchSnapshot implements Serializable {
         static PlayerState capture(Player p) throws DopoSoccerException {
             Character_ c = p.getCharacter();
             if (c == null) {
-                throw new DopoSoccerException("No se puede guardar: el jugador " + p.getName() + " no tiene personaje asignado.");
+                throw new DopoSoccerException(CHARACTERS_NOT_ASSIGNED  + p.getName());
             }
             return new PlayerState(p, c);
         }
 
         public boolean isHuman() { return human; }
         public String getCpuProfile() { return cpuProfile; }
+        public String getCountry() { return country; }
 
         // Reconstruye perfil y personaje ANTES de crear el Match (initEntitiesOnField los necesita).
-        public void applyProfileTo(Player p) throws DopoSoccerException {
+        public void applyProfileTo(Player p, CharacterFactory factory) throws DopoSoccerException {
             p.setPoints(points);
             p.setSpeed(speed);
             p.setJump(jump);
             p.setKick(kick);
             p.setSurvival(survival);
-            p.setCharacter(Character_.create(country));
+            p.setCharacter(factory.create(country, null));
         }
 
         // Reaplica vida, barra, aura, aturdimiento, posición y velocidad DESPUÉS de crear el Match.
@@ -117,7 +121,7 @@ public class MatchSnapshot implements Serializable {
 
     public static MatchSnapshot capture(Match match, String matchType, double limitValue) throws DopoSoccerException {
         if (match == null) {
-            throw new DopoSoccerException("No hay un partido para guardar.");
+            throw new DopoSoccerException(NULL_MATCH);
         }
         return new MatchSnapshot(matchType, limitValue, match);
     }
@@ -133,25 +137,25 @@ public class MatchSnapshot implements Serializable {
     // Se mantienen los nombres guardar/abrir para ser consistentes con SaveFile.
     public void guardar(File file) throws DopoSoccerException {
         if (file == null) {
-            throw new DopoSoccerException("El archivo de destino no puede ser nulo.");
+            throw new DopoSoccerException(NULL_SAVEFILE);
         }
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(this);
         } catch (IOException e) {
-            throw new DopoSoccerException("Error al guardar el partido: " + e.getMessage(), e);
+            throw new DopoSoccerException(ERROR_SAVING + e.getMessage(), e);
         }
     }
 
     public static MatchSnapshot abrir(File file) throws DopoSoccerException {
         if (file == null || !file.exists()) {
-            throw new DopoSoccerException("El archivo del partido no existe.");
+            throw new DopoSoccerException(NULL_SAVEFILE);
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             return (MatchSnapshot) ois.readObject();
         } catch (ClassCastException e) {
-            throw new DopoSoccerException("El archivo no corresponde a un partido guardado de DopoSoccer.", e);
+            throw new DopoSoccerException(INVALID_SAVEFILE_MATCH, e);
         } catch (IOException | ClassNotFoundException e) {
-            throw new DopoSoccerException("Error al abrir el partido: " + e.getMessage(), e);
+            throw new DopoSoccerException(ERROR_OPENING + e.getMessage(), e);
         }
     }
 
@@ -161,5 +165,6 @@ public class MatchSnapshot implements Serializable {
     public double getFieldHeight() { return fieldHeight; }
     public PlayerState getPlayer1() { return player1; }
     public PlayerState getPlayer2() { return player2; }
+
 
 }

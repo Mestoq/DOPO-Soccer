@@ -14,7 +14,6 @@ import domain.player.Cpu;
 import domain.player.HumanPlayer;
 import domain.player.Player;
 import domain.power.effect.Effect;
-
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -61,21 +60,21 @@ public class GamePanel extends JPanel {
     private static final String HEALTH_FILL_PATH = "/images/game/hud/health_fill.png";
     private static final String POWER_FILL_PATH = "/images/game/hud/power_fill.png";
     private static final String[][] FLAG_SPRITES = {
-            {"COREA DEL SUR", "/images/game/flags/korea.png"},
+            {"KOREA", "/images/game/flags/korea.png"},
             {"CAMERUN", "/images/game/flags/cameroon.png"},
             {"NIGERIA", "/images/game/flags/nigeria.png"},
-            {"ESTADOS UNIDOS", "/images/game/flags/usa.png"}
+            {"USA", "/images/game/flags/usa.png"}
     };
 
     // Personaje: {país (clave de Character_.create), sprite normal, sprite de patada, aura del poder}
     private static final String[][] CHARACTER_SPRITES = {
-            {"COREA DEL SUR", "/images/character/korea.png",
+            {"KOREA", "/images/character/korea.png",
                     "/images/game/characters/korea_kick.png", "/images/game/aura/korea.png"},
             {"CAMERUN", "/images/character/cameroon.png",
                     "/images/game/characters/cameroon_kick.png", "/images/game/aura/cameroon.png"},
             {"NIGERIA", "/images/character/nigeria.png",
                     "/images/game/character/nigeria_kick.png", "/images/game/aura/nigeria.png"},
-            {"ESTADOS UNIDOS", "/images/character/usa.png",
+            {"USA", "/images/character/usa.png",
                     "/images/game/characters/usa_kick.png", "/images/game/aura/usa.png"}
     };
     // Icono del efecto negativo sobre la cabeza (clave = Effect.getName())
@@ -194,7 +193,7 @@ public class GamePanel extends JPanel {
         this.loop = new Timer(FRAME_MS, e -> tick());
 
         setPreferredSize(new Dimension(DopoSoccerGUI.MENU_WIDTH, DopoSoccerGUI.MENU_HEIGHT));
-        setLayout(null); // los botones de pausa se ubican con setBounds
+        setLayout(null);
         setFocusable(true);
         preparePauseMenu();
         prepareKeyBindings();
@@ -215,8 +214,7 @@ public class GamePanel extends JPanel {
         }
     }
 
-    // Ciclo de vida: el partido existe solo mientras el panel está visible
-
+    // el partido existe solo mientras el panel está visible
 
     private void prepareLifecycle() {
         addComponentListener(new ComponentAdapter() {
@@ -244,7 +242,7 @@ public class GamePanel extends JPanel {
             int width;
             int height;
             if (fromSnapshot) {
-                // La cancha tiene la resolución con que se guardó el partido
+                // cancha con la resolución con que se guardó el partido
                 width = (int) snapshot.getFieldWidth();
                 height = (int) snapshot.getFieldHeight();
                 match = dopo.loadMatch(snapshot, new Field(width, height));
@@ -358,7 +356,6 @@ public class GamePanel extends JPanel {
 
     // Pausa
 
-
     private void preparePauseMenu() {
         pauseButtons = new MenuButton[] {
                 new MenuButton("REANUDAR", this::onResume),
@@ -455,14 +452,6 @@ public class GamePanel extends JPanel {
         loop.stop();
     }
 
-    private void onExit() {
-        audio.playSound(CLICK_SOUND);
-        // Pequeña espera para que el sonido alcance a oírse antes de cerrar
-        Timer exitTimer = new Timer(EXIT_DELAY_MS, e -> System.exit(0));
-        exitTimer.setRepeats(false);
-        exitTimer.start();
-    }
-
     /** Vuelve al menú sin guardar nada del progreso ni sumar puntos. */
     private void onLeaveMatch() {
         audio.playSound(CLICK_SOUND);
@@ -482,7 +471,6 @@ public class GamePanel extends JPanel {
     }
 
     // Controles: J1 (A/D/W, F patear, G poder), J2 (flechas, L patear, K poder), ESC pausa
-
 
     private void prepareKeyBindings() {
         bind(KeyEvent.VK_ESCAPE, true, this::togglePause);
@@ -527,21 +515,15 @@ public class GamePanel extends JPanel {
         if (human2 != null && !isPaused()) action.accept(human2);
     }
 
-
     // Dibujo
-
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         if (match == null) {
-            g2.setColor(Color.BLACK);
-            g2.fillRect(0, 0, getWidth(), getHeight());
+            drawPlaceholder(g2, 0, 0, getWidth(), getHeight());
             g2.dispose();
             return;
         }
@@ -553,8 +535,7 @@ public class GamePanel extends JPanel {
         if (background != null) {
             g2.drawImage(background, 0, 0, w, h, null);
         } else {
-            g2.setColor(new Color(40, 120, 50));
-            g2.fillRect(0, 0, w, h);
+            drawPlaceholder(g2, 0, 0, w, h);
         }
 
         drawCharacter(g2, match.getPlayer1());
@@ -566,11 +547,15 @@ public class GamePanel extends JPanel {
         drawGoal(g2, field.getRightGoal(), goalRight);
         drawHud(g2, w);
 
-        // Se pinta antes que los hijos (botones), así que queda por debajo de ellos
         if (isPaused()) {
             drawPauseOverlay(g2, w, h);
         }
         g2.dispose();
+    }
+
+    private void drawPlaceholder(Graphics2D g2, int x, int y, int w, int h) {
+        g2.setColor(Color.GRAY);
+        g2.fillRect(x, y, w, h);
     }
 
     /**
@@ -605,8 +590,7 @@ public class GamePanel extends JPanel {
         if (image != null) {
             g2.drawImage(image, x, y, gw, gh, null);
         } else {
-            g2.setColor(Color.WHITE);
-            g2.drawRect(x, y, gw, gh);
+            drawPlaceholder(g2, x, y, gw, gh);
         }
     }
 
@@ -621,11 +605,17 @@ public class GamePanel extends JPanel {
         int y = (int) (c.getY() - ch / 2.0);
 
         // Aura del poder activo, detrás del personaje (una distinta por país)
-        BufferedImage aura = auraSprites.get(c.getCountry());
-        if (player.hasPowerAura() && aura != null) {
+        if (player.hasPowerAura()) {
+            BufferedImage aura = auraSprites.get(c.getCountry());
             int aw = (int) (cw * AURA_SCALE);
             int ah = (int) (ch * AURA_SCALE);
-            g2.drawImage(aura, (int) (c.getX() - aw / 2.0), (int) (c.getY() - ah / 2.0), aw, ah, null);
+            int ax = (int) (c.getX() - aw / 2.0);
+            int ay = (int) (c.getY() - ah / 2.0);
+            if (aura != null) {
+                g2.drawImage(aura, ax, ay, aw, ah, null);
+            } else {
+                drawPlaceholder(g2, ax, ay, aw, ah);
+            }
         }
 
         // Sprite normal o de patada (dibujados mirando a la derecha; se voltean al mirar a la izquierda)
@@ -641,8 +631,7 @@ public class GamePanel extends JPanel {
 
     private void drawFacing(Graphics2D g2, BufferedImage sprite, int x, int y, int w, int h, boolean facingRight) {
         if (sprite == null) {
-            g2.setColor(Color.MAGENTA);
-            g2.fillRect(x, y, w, h);
+            drawPlaceholder(g2, x, y, w, h);
         } else if (facingRight) {
             g2.drawImage(sprite, x, y, w, h, null);
         } else {
@@ -656,7 +645,7 @@ public class GamePanel extends JPanel {
         return new double[] {c.getX(), c.getY() - c.getLogicalHeight() / 2.0 - size / 2.0 - 6};
     }
 
-    /** Acerca la posición del icono a la del personaje (seguimiento con retraso). */
+    /** Acerca la posición del icono a la del personaje. */
     private void updateIconFollow(Player p, double dt) {
         Character_ c = p.getCharacter();
         if (c == null) {
@@ -679,20 +668,24 @@ public class GamePanel extends JPanel {
             return;
         }
         List<BufferedImage> icons = new ArrayList<>();
-        if (player.isStunned() && stun != null) {
+        if (player.isStunned()) {
             icons.add(stun);
         }
         Effect effect = c.getActiveEffect();
         if (effect != null) {
-            BufferedImage effectIcon = effectSprites.get(effect.getName());
-            if (effectIcon != null) {
-                icons.add(effectIcon);
-            }
+            icons.add(effectSprites.get(effect.getName()));
         }
         int size = (int) (c.getLogicalWidth() * ICON_SCALE);
         int startX = (int) (pos[0] - icons.size() * size / 2.0);
+        int iconY = (int) (pos[1] - size / 2.0);
         for (int i = 0; i < icons.size(); i++) {
-            g2.drawImage(icons.get(i), startX + i * size, (int) (pos[1] - size / 2.0), size, size, null);
+            BufferedImage icon = icons.get(i);
+            int iconX = startX + i * size;
+            if (icon != null) {
+                g2.drawImage(icon, iconX, iconY, size, size, null);
+            } else {
+                drawPlaceholder(g2, iconX, iconY, size, size);
+            }
         }
     }
 
@@ -704,15 +697,18 @@ public class GamePanel extends JPanel {
         // Sprite del poder en vuelo, detrás del balón (solo el real; los falsos no lo llevan)
         if (!b.isFake() && b.hasActivePower()) {
             BufferedImage powerSprite = ballPowerSprites.get(b.getActivePower().getPowerName());
+            int pd = (int) (d * BALL_POWER_SCALE);
+            int px = (int) (b.getX() - pd / 2.0);
+            int py = (int) (b.getY() - pd / 2.0);
             if (powerSprite != null) {
-                int pd = (int) (d * BALL_POWER_SCALE);
-                g2.drawImage(powerSprite, (int) (b.getX() - pd / 2.0), (int) (b.getY() - pd / 2.0), pd, pd, null);
+                g2.drawImage(powerSprite, px, py, pd, pd, null);
+            } else {
+                drawPlaceholder(g2, px, py, pd, pd);
             }
         }
 
         if (ball == null) {
-            g2.setColor(Color.WHITE);
-            g2.fillOval(x, y, d, d);
+            drawPlaceholder(g2, x, y, d, d);
             return;
         }
         // Se rota alrededor de su centro según el ángulo del cuerpo físico
@@ -722,9 +718,7 @@ public class GamePanel extends JPanel {
         rotated.dispose();
     }
 
-
     // HUD
-
 
     private void drawHud(Graphics2D g2, int w) {
         double s = w / 1600.0;
@@ -749,8 +743,8 @@ public class GamePanel extends JPanel {
         drawShadowedText(g2, name, x, nameY);
 
         double health = p.getMaxHealth() <= 0 ? 0 : p.getCurrentHealth() / p.getMaxHealth();
-        drawBar(g2, x, healthY, barW, barH, health, healthFill, new Color(220, 50, 50), rightToLeft);
-        drawBar(g2, x, powerY, barW, powerH, p.getPowerBar() / 100.0, powerFill, new Color(60, 140, 240), rightToLeft);
+        drawBar(g2, x, healthY, barW, barH, health, healthFill, rightToLeft);
+        drawBar(g2, x, powerY, barW, powerH, p.getPowerBar() / 100.0, powerFill, rightToLeft);
     }
 
     /**
@@ -758,7 +752,7 @@ public class GamePanel extends JPanel {
      * Se asume que fill y frame tienen las mismas proporciones.
      */
     private void drawBar(Graphics2D g2, int x, int y, int w, int h, double ratio, BufferedImage fill,
-                         Color fallback, boolean rightToLeft) {
+                         boolean rightToLeft) {
         int fillW = (int) (w * Math.max(0.0, Math.min(1.0, ratio)));
         int clipX = rightToLeft ? x + (w - fillW) : x;
 
@@ -767,16 +761,14 @@ public class GamePanel extends JPanel {
         if (fill != null) {
             g2.drawImage(fill, x, y, w, h, null);
         } else {
-            g2.setColor(fallback);
-            g2.fillRect(x, y, w, h);
+            drawPlaceholder(g2, x, y, w, h);
         }
         g2.setClip(oldClip);
 
         if (barFrame != null) {
             g2.drawImage(barFrame, x, y, w, h, null);
         } else {
-            g2.setColor(Color.WHITE);
-            g2.drawRect(x, y, w, h);
+            drawPlaceholder(g2, x, y, w, h);
         }
     }
 

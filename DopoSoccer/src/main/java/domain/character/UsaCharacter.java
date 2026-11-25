@@ -8,7 +8,7 @@ import domain.physics.Ball;
 public class UsaCharacter extends Character_ {
 
     public UsaCharacter() {
-        super("ESTADOS UNIDOS", Power.create("ILUSION"));
+        super("USA", Power.create("ILUSION"));
     }
 
     @Override

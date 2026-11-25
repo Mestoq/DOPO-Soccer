@@ -9,9 +9,7 @@ import domain.match.TimeMatch;
 import domain.physics.Field;
 import domain.player.Cpu;
 import domain.player.HumanPlayer;
-import domain.player.Player;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -32,164 +30,163 @@ public class DopoSoccerTest {
     File tmp;
 
     /**
-     * antes de cada prueba creamos un doposoccer nuevo, dos players y una cpu en expert, para que ninguna prueba depende de otra
-     *
+     * Antes de cada prueba creamos un DopoSoccer nuevo, dos players y una CPU en expert,
+     * para que ninguna prueba dependa de otra.
      */
     @BeforeEach
-    void setUp(){
+    void setUp() {
         game = new DopoSoccer();
-        p1=new HumanPlayer("Player 1");
-        p2=new HumanPlayer("Player 2");
-        cpu=new Cpu("CPU", Cpu.PROFILE_EXPERT);
+        p1 = new HumanPlayer("Player 1");
+        p2 = new HumanPlayer("Player 2");
+        cpu = new Cpu("CPU", Cpu.PROFILE_EXPERT);
     }
 
-    private Field newField(){
+    private Field newField() {
         return new Field(1600, 900);
     }
 
-     /**
-     * prueba la creacion de perfiles del constructor
-     *
+    /**
+     * Prueba la creación de perfiles del constructor.
      */
-    @Test 
-    void constructorCreateNewprofiles(){
+    @Test
+    void constructorCreateNewprofiles() {
         DopoSoccer game = new DopoSoccer();
         assertFalse(game.isSaveLoaded("Player 1"));
         assertFalse(game.isSaveLoaded("Player 2"));
         assertFalse(game.isAnySaveLoaded());
     }
-     /**
-     * con perfil nuevo intenta asignar cada uno de los 4 personajes base a p1 y verfica que lanza la excepcion
-     *
+
+    /**
+     * Con perfil nuevo intenta asignar cada uno de los 4 personajes base a p1 y verifica que no lanza excepción.
      */
-    @Test 
-    void defaultrosterallowbasecharacter(){
+    @Test
+    void defaultrosterallowbasecharacter() {
         game.preFixPlayers(p1, p2);
-        for (String c : List.of("COREA DEL SUR", "CAMERUN", "NIGERIA", "ESTADOS UNIDOS")){
+        for (String c : List.of("KOREA", "CAMEROON", "NIGERIA", "USA")) {
             assertDoesNotThrow(() -> game.preFixCharacters(c, "NIGERIA"), c);
-        }            
+        }
     }
-     /**
-     * configura dos humanos y asigna camerun y nigeria para verificar que cada jugador quedo con el personaje del pais correcto 
-     *
+
+    /**
+     * Configura dos humanos y asigna Camerun y Nigeria para verificar que cada jugador quedó con el personaje del país correcto.
      */
-    @Test 
-    void prefixcharacterassignhumanvshuman(){
+    @Test
+    void prefixcharacterassignhumanvshuman() throws DopoSoccerException {
         game.preFixPlayers(p1, p2);
-        game.preFixCharacters("CAMERUN", "NIGERIA");
-        assertEquals("CAMERUN", p1.getCharacter().getCountry());
+        game.preFixCharacters("CAMEROON", "NIGERIA");
+        assertEquals("CAMEROON", p1.getCharacter().getCountry());
         assertEquals("NIGERIA", p2.getCharacter().getCountry());
     }
+
     /**
-     * configura humanos vs cpu de forma que se verifica que la cpu recibe el personaje del rival y p1 el suyo
-     *
+     * Configura humanos vs CPU de forma que se verifica que la CPU recibe el personaje del rival y p1 el suyo.
      */
-    @Test 
-    void prefixcharacterassigncpurival(){
+    @Test
+    void prefixcharacterassigncpurival() throws DopoSoccerException {
         game.preFixPlayers(p1, cpu);
-        game.preFixCharacters("COREA DEL SUR", "ESTADOS UNIDOS");
-        assertEquals("COREA DEL SUR", p1.getCharacter().getCountry());
-        assertEquals("ESTADOS UNIDOS", cpu.getCharacter().getCountry());
+        game.preFixCharacters("KOREA", "USA");
+        assertEquals("KOREA", p1.getCharacter().getCountry());
+        assertEquals("USA", cpu.getCharacter().getCountry());
     }
-     /**
-     * sirven los nombres con espacios y en minusculas, y que se asignan igualmente
-     *
+
+    /**
+     * Sirven los nombres con espacios y en minúsculas, y se asignan igualmente.
      */
-    @Test 
-    void prefixcharactersnormalixesNames(){
+    @Test
+    void prefixcharactersnormalixesNames() throws DopoSoccerException {
         game.preFixPlayers(p1, p2);
-        game.preFixCharacters("  camerun  ", "  nigeria ");
-        assertEquals("CAMERUN", p1.getCharacter().getCountry());
+        game.preFixCharacters("  cameroon ", "  nigeria ");
+        assertEquals("CAMEROON", p1.getCharacter().getCountry());
         assertEquals("NIGERIA", p2.getCharacter().getCountry());
     }
-     /**
-     * llama a prefixcharacters sin haber llamado antes prefixplayers de forma que verifica si se lanza la excepcion
-     *
-     */
-    @Test 
-    void prefixcharacterwithoutplayers(){
-        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMERUN", "NIGERIA"));
-    }
-     /**
-     * registra dos jugadores con el mismo nombre, de forma que verifica la excepcion 
-     *
-     */
-    @Test 
-    void prefixcharacterswithsingleplayer(){
-        game.preFixPlayers(new HumanPlayer("Player 1"), new HumanPlayer("Player 1"));
-        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMERUN", "NIGERIA"));
-    }
+
     /**
-     * pide para p1 un personaje que no esta en el roster y mira si lanza la excepcion 
-     *
+     * Llama a preFixCharacters sin haber llamado antes preFixPlayers y verifica que lanza la excepción.
      */
-    @Test 
-    void prefixcharacterswithfakename(){
+    @Test
+    void prefixcharacterwithoutplayers() {
+        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMEROON", "NIGERIA"));
+    }
+
+    /**
+     * Registra dos jugadores con el mismo nombre y verifica la excepción.
+     */
+    @Test
+    void prefixcharacterswithsingleplayer() {
+        game.preFixPlayers(new HumanPlayer("Player 1"), new HumanPlayer("Player 1"));
+        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMEROON", "NIGERIA"));
+    }
+
+    /**
+     * Pide para p1 un personaje que no está en el roster y verifica que lanza la excepción.
+     */
+    @Test
+    void prefixcharacterswithfakename() {
         game.preFixPlayers(p1, p2);
-        DopoSoccerException ex =  assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("BRAZIL", "NIGERIA"));
+        DopoSoccerException ex = assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("BRAZIL", "NIGERIA"));
         assertTrue(ex.getMessage().contains("BRAZIL"));
     }
+
     /**
-     * pasa un null como personaje de p1 y verifica la excepcion 
-     *
+     * Pasa null como personaje de p1 y verifica la excepción.
      */
-    @Test 
-    void prefixcharactersnullp1(){
+    @Test
+    void prefixcharactersnullp1() {
         game.preFixPlayers(p1, p2);
-        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("null", "NIGERIA"));
+        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters(null, "NIGERIA"));
     }
+
     /**
-     * pasa un null como personaje de p1 y deja en blanco la del rival verificando la excepcion 
-     *
+     * Pasa null o cadena en blanco como personaje del rival y verifica la excepción.
      */
-    @Test 
-    void prefixcharactersinvalidrival(){
+    @Test
+    void prefixcharactersinvalidrival() {
         game.preFixPlayers(p1, p2);
-        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMERUN", "null"));
-        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMERUN", "   "));
+        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMEROON", null));
+        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMEROON", "   "));
     }
+
     /**
-     * pais del rival no existe de forma que verifica la excepcion 
-     *
+     * País del rival no existe y verifica la excepción.
      */
-    @Test 
-    void prefixcharacterunknownrival(){
+    @Test
+    void prefixcharacterunknownrival() {
         game.preFixPlayers(p1, p2);
-        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMERUN", "ATLANTIDA"));
+        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("CAMEROON", "ATLANTIDA"));
     }
+
     /**
-    * llama dos veces a prefixPlayers y verifica que el partido use los nuevos 
-    *
+     * Llama dos veces a preFixPlayers y verifica que el partido use los nuevos.
      */
-    @Test 
-    void prefixplayersreplacesprevious(){
+    @Test
+    void prefixplayersreplacesprevious() {
         game.preFixPlayers(p1, p2);
         game.preFixPlayers(p1, cpu);
         Match m = game.preFixMatch("GOALS", newField(), 3);
         assertSame(p1, m.getPlayer1());
         assertSame(cpu, m.getPlayer2());
     }
+
     /**
-     * llama a prefixmatch sin configurar llos jugadores, verifica la excepcion
-     *
+     * Llama a preFixMatch sin configurar los jugadores y verifica la excepción.
      */
-    @Test 
-    void prefixmatchwithoutplayers(){
+    @Test
+    void prefixmatchwithoutplayers() {
         assertThrows(IllegalStateException.class, () -> game.preFixMatch("TIME", newField(), 60));
     }
+
     /**
-     * pide un partido time de 120s y verifica que devuelve un timematch en modo tiempo con 120 segundos restantes
-     *
+     * Pide un partido TIME de 120s y verifica que devuelve un TimeMatch en modo tiempo con 120 segundos restantes.
      */
-    @Test 
-    void prefixmatchtimecreatestimematch(){
+    @Test
+    void prefixmatchtimecreatestimematch() {
         game.preFixPlayers(p1, p2);
         Match m = game.preFixMatch("TIME", newField(), 120);
         assertInstanceOf(TimeMatch.class, m);
         assertTrue(m.getGameInfo().isTimeMode());
         assertEquals(120.0, m.getGameInfo().getRemainingTime(), 1e-9);
     }
-    
+
     /**
      * Pide un partido GOALS a 7 goles. Verifica que devuelve un GoalMatch en modo goles con meta 7.
      */
@@ -237,7 +234,7 @@ public class DopoSoccerTest {
      */
     @Test
     void preFixMatchAssignsSides() {
-        game.preFixPlayers(p2, p1); // el orden de registro no importa
+        game.preFixPlayers(p2, p1);
         Match m = game.preFixMatch("TIME", newField(), 60);
         assertSame(p1, m.getPlayer1());
         assertSame(p2, m.getPlayer2());
@@ -247,9 +244,9 @@ public class DopoSoccerTest {
      * Flujo completo: jugadores, personajes y partido. Verifica que los personajes quedan en el 22% y el 78% del ancho de la cancha.
      */
     @Test
-    void fullFlowPlacesCharactersOnField() {
+    void fullFlowPlacesCharactersOnField() throws DopoSoccerException {
         game.preFixPlayers(p1, cpu);
-        game.preFixCharacters("CAMERUN", "NIGERIA");
+        game.preFixCharacters("CAMEROON", "NIGERIA");
         Field field = newField();
         Match m = game.preFixMatch("GOALS", field, 3);
         assertEquals(field.getWidth() * 0.22, m.getPlayer1().getCharacter().getX(), 1.0);
@@ -271,7 +268,7 @@ public class DopoSoccerTest {
      * Guarda el progreso en un archivo temporal y lo carga en otro DopoSoccer. Verifica que el archivo existe, no está vacío y que isSaveLoaded() queda en true.
      */
     @Test
-    void saveAndLoadRoundTrip() {
+    void saveAndLoadRoundTrip() throws DopoSoccerException {
         File f = new File(tmp, "progreso.dat");
         game.saveProgress("Player 1", f);
         assertTrue(f.exists());
@@ -318,37 +315,21 @@ public class DopoSoccerTest {
     }
 
     /**
-     * Crea un save donde solo camerun está desbloqueado y lo carga,  camerun se debe poder usar y nigeria sigue bloqueado.
+     * Pasa un SaveFile importado con un roster propio. Verifica que solo ese roster está disponible.
      */
     @Test
-    void loadSaveRestrictsRoster() throws IOException {
-        // Se arma un save que solo tiene a CAMERUN desbloqueado
-        File txt = new File(tmp, "save.txt");
-        Files.writeString(txt.toPath(), "points=0\ncharacters=CAMERUN\n");
-        SaveFile onlyCameroon = SaveFile.importar(txt);
-        File dat = new File(tmp, "save.dat");
-        onlyCameroon.guardar(dat);
-
-        game.loadSave("Player 1", dat);
-        game.preFixPlayers(p1, p2);
-
-        assertDoesNotThrow(() -> game.preFixCharacters("CAMERUN", "NIGERIA"));
-        assertThrows(DopoSoccerException.class, () -> game.preFixCharacters("NIGERIA", "CAMERUN"));
-    }
-    /**
-     * Pasa al constructor un SaveFile importado con un roster propio. Verifica que solo ese roster está disponible.
-     */
-    @Test
-    void constructorUsesRosterFromSaveFile() throws IOException {
+    void constructorUsesRosterFromSaveFile() throws IOException, DopoSoccerException {
         File txt = new File(tmp, "save.txt");
         Files.writeString(txt.toPath(), "characters=USA_NO_EXISTE,NIGERIA\n");
         DopoSoccer g = new DopoSoccer();
         SaveFile imported = SaveFile.importar(txt);
         File dat = new File(tmp, "save.dat");
         imported.guardar(dat);
+
         g.loadSave("Player 1", dat);
         g.preFixPlayers(p1, p2);
-        assertDoesNotThrow(() -> g.preFixCharacters("NIGERIA", "CAMERUN"));
-        assertThrows(DopoSoccerException.class, () -> g.preFixCharacters("CAMERUN", "NIGERIA"));
+
+        assertDoesNotThrow(() -> g.preFixCharacters("NIGERIA", "CAMEROON"));
+        assertThrows(DopoSoccerException.class, () -> g.preFixCharacters("CAMEROON", "NIGERIA"));
     }
 }

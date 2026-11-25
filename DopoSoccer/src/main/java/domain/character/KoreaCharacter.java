@@ -7,7 +7,7 @@ import domain.physics.Ball;
 public class KoreaCharacter extends Character_ {
 
     public KoreaCharacter() {
-        super("COREA DEL SUR", Power.create("AURA AZUL"));
+        super("KOREA", Power.create("AURA AZUL"));
     }
 
     @Override

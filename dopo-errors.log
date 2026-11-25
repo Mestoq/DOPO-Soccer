@@ -1060,3 +1060,239 @@ Nov 22, 2026 11:29:47 PM domain.ErrorLog warn
 WARNING: Música de fondo no encontrada: /audio/music/game.wav
 Nov 22, 2026 11:30:03 PM domain.ErrorLog warn
 WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/whovswho/middle.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/matchmode/middle.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/stun.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/bar_frame.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/health_fill.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/power_fill.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/korea_kick.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/korea.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/cameroon_kick.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/cameroon.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/character/nigeria_kick.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/nigeria.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/usa_kick.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/usa.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/push.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/electrocuted.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/unconscious.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/confusion.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/blue_aura.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/lightning.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/tornado.png
+Nov 23, 2026 5:36:42 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/start.wav
+Nov 23, 2026 5:36:50 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:37:11 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:37:12 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:37:16 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:37:20 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:37:21 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:37:30 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:37:34 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/character.wav
+Nov 23, 2026 5:37:50 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/game.wav
+Nov 23, 2026 5:37:50 PM domain.ErrorLog error
+SEVERE: Personaje no disponible: USA
+Nov 23, 2026 5:37:51 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/character.wav
+Nov 23, 2026 5:37:56 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/game.wav
+Nov 23, 2026 5:38:30 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:39:20 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/game.wav
+Nov 23, 2026 5:39:30 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:39:32 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 23, 2026 5:39:37 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 25, 2026 2:02:29 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/whovswho/middle.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/matchmode/middle.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/stun.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/bar_frame.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/health_fill.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/power_fill.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/korea_kick.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/korea.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/cameroon_kick.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/cameroon.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/character/nigeria_kick.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/nigeria.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/usa_kick.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/usa.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/push.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/electrocuted.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/unconscious.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/confusion.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/blue_aura.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/lightning.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/tornado.png
+Nov 25, 2026 2:02:30 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/start.wav
+Nov 25, 2026 2:02:33 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 25, 2026 2:02:36 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 25, 2026 2:02:40 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 25, 2026 2:02:51 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/character.wav
+Nov 25, 2026 2:02:54 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/game.wav
+Nov 25, 2026 2:02:54 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: USA
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/whovswho/middle.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/matchmode/middle.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/stun.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/bar_frame.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/health_fill.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/power_fill.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/korea_kick.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/korea.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/cameroon_kick.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/cameroon.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/character/nigeria_kick.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/nigeria.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/usa_kick.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/usa.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/push.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/electrocuted.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/unconscious.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/confusion.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/blue_aura.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/lightning.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/tornado.png
+Nov 25, 2026 2:10:15 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/start.wav
+Nov 25, 2026 2:10:17 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 25, 2026 2:10:18 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 25, 2026 2:10:21 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/menu.wav
+Nov 25, 2026 2:10:25 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/character.wav
+Nov 25, 2026 2:10:27 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/game.wav
+Nov 25, 2026 2:10:27 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: USA
+Nov 25, 2026 2:10:52 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/character.wav
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/whovswho/middle.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/matchmode/middle.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/stun.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/bar_frame.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/health_fill.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/hud/power_fill.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/korea_kick.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/korea.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/cameroon_kick.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/cameroon.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/character/nigeria_kick.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/nigeria.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/characters/usa_kick.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/aura/usa.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/push.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/electrocuted.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/unconscious.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/effects/confusion.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/blue_aura.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/lightning.png
+Nov 25, 2026 2:43:22 PM domain.ErrorLog warn
+WARNING: Imagen no encontrada: /images/game/ballpower/tornado.png
+Nov 25, 2026 2:43:23 PM domain.ErrorLog warn
+WARNING: Música de fondo no encontrada: /audio/music/start.wav

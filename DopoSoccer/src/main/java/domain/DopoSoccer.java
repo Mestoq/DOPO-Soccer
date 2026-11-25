@@ -1,6 +1,6 @@
 package domain;
 
-import domain.character.Character_;
+import domain.character.*;
 import domain.match.*;
 import domain.physics.Field;
 import domain.player.HumanPlayer;
@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.ToIntFunction;
+
+import static domain.DopoSoccerException.*;
 
 public class DopoSoccer {
 
@@ -36,6 +38,7 @@ public class DopoSoccer {
     private final Map<String, SaveFile> profiles = new HashMap<>();   // un perfil por jugador humano
     private final Set<String> loadedProfiles = new HashSet<>();       // perfiles cargados desde archivo
     private final Map<String, MatchFactory> matchFactories = new HashMap<>();
+    private final Map<String, CharacterFactory> characterFactories = new HashMap<>();
     private boolean resultApplied; // evita sumar dos veces los puntos de un mismo partido
 
     public DopoSoccer() {
@@ -44,6 +47,11 @@ public class DopoSoccer {
         matchFactories.put("TIME",  (field, p1, p2, val) -> new TimeMatch(field, p1, p2, val));
         matchFactories.put("GOALS", (field, p1, p2, val) -> new GoalMatch(field, p1, p2, (int) val));
 
+        characterFactories.put("KOREA",    (country, power) -> new KoreaCharacter());
+        characterFactories.put("CAMEROON", (country, power) -> new CameroonCharacter());
+        characterFactories.put("NIGERIA",  (country, power) -> new NigeriaCharacter());
+        characterFactories.put("USA",      (country, power) -> new UsaCharacter());
+
         profiles.put(PLAYER_1, new SaveFile());
         profiles.put(PLAYER_2, new SaveFile());
     }
@@ -51,7 +59,7 @@ public class DopoSoccer {
     private SaveFile profileOf(String name) throws DopoSoccerException {
         SaveFile profile = profiles.get(name);
         if (profile == null) {
-            throw new DopoSoccerException("Perfil no válido: " + name);
+            throw new DopoSoccerException(INVALID_PROFILE + name);
         }
         return profile;
     }
@@ -68,17 +76,30 @@ public class DopoSoccer {
         if (players.size() < 2) {
             throw new DopoSoccerException(DopoSoccerException.PLAYERS_NOT_SET);
         }
+
+        if (p1CharacterName == null || p2CharacterName == null) {
+            throw new DopoSoccerException(NULL_CHARECTER_NAME);
+        }
+
+        CharacterFactory factory1 = characterFactories.get(p1CharacterName.trim().toUpperCase());
+        if (factory1 == null) {
+            throw new DopoSoccerException(ROASTER_NOT_IN_ROASTER + p1CharacterName);
+        }
+
+        CharacterFactory factory2 = characterFactories.get(p2CharacterName.trim().toUpperCase());
+        if (factory2 == null) {
+            throw new DopoSoccerException(ROASTER_NOT_IN_ROASTER + p2CharacterName);
+        }
+
         Player p1 = players.get(PLAYER_1);
         Player p2 = players.containsKey(PLAYER_2) ? players.get(PLAYER_2) : players.get(CPU);
 
         checkCharacter(p1, p1CharacterName);
         checkCharacter(p2, p2CharacterName);
 
-        // Usamos el Factory Method de Character_
-        p1.setCharacter(Character_.create(p1CharacterName));
-        p2.setCharacter(Character_.create(p2CharacterName));
+        p1.setCharacter(factory1.create(p1CharacterName, null));
+        p2.setCharacter(factory2.create(p2CharacterName, null));
     }
-
     /**
      * Un humano solo puede usar los personajes desbloqueados en su perfil; la CPU, cualquiera válido.
      */
@@ -94,12 +115,12 @@ public class DopoSoccer {
 
     public Match preFixMatch(String type, Field field, double limitValue) {
         if (players.size() < 2) {
-            throw new IllegalStateException("Debes configurar los jugadores con preFixPlayers antes de iniciar el partido.");
+            throw new IllegalStateException(CHARACTERS_NOT_SET );
         }
 
         MatchFactory factory = matchFactories.get(type.toUpperCase());
         if (factory == null) {
-            throw new IllegalArgumentException("Tipo de partido no soportado: " + type);
+            throw new IllegalArgumentException(MATCH_TYPE_UNSUPPORTED + type);
         }
 
         // Para determinar en qué lado jugarán
@@ -107,7 +128,7 @@ public class DopoSoccer {
         Player p2 = players.containsKey(PLAYER_2) ? players.get(PLAYER_2) : players.get(CPU);
 
         if (p1 == null || p2 == null) {
-            throw new IllegalStateException("No se encontraron los roles esperados (Player 1 y Player 2/CPU) en el Treemap.");
+            throw new IllegalStateException(INCORRECT_TREEMAP_OBJECTS);
         }
 
         // Cada humano arranca con el progreso de su perfil
@@ -177,7 +198,7 @@ public class DopoSoccer {
         profileOf(profileName); // valida el nombre
         SaveFile loaded = SaveFile.abrir(file);
         if (loaded == null || !loaded.getStatus()) {
-            throw new DopoSoccerException("El archivo de progreso no es válido.");
+            throw new DopoSoccerException(INVALID_SAVEFILE);
         }
         profiles.put(profileName, loaded);
         loadedProfiles.add(profileName);
@@ -205,9 +226,20 @@ public class DopoSoccer {
         return this.currentMatch;
     }
 
-    private Player buildPlayer(String name, MatchSnapshot.PlayerState state) {
+    private Player buildPlayer(String name, MatchSnapshot.PlayerState state) throws DopoSoccerException {
         Player player = state.isHuman() ? new HumanPlayer(name) : new Cpu(name, state.getCpuProfile());
-        state.applyProfileTo(player); // estadísticas y personaje, antes de crear el Match
+
+
+        String country = state.getCountry();
+        if (country == null) {
+            throw new DopoSoccerException(NULL_CHARECTER_NAME);
+        }
+        CharacterFactory factory = characterFactories.get(country.trim().toUpperCase());
+        if (factory == null) {
+            throw new DopoSoccerException(ROASTER_NOT_IN_ROASTER + country);
+        }
+
+        state.applyProfileTo(player, factory); // estadísticas y personaje, antes de crear el Match
         return player;
     }
 
@@ -234,7 +266,7 @@ public class DopoSoccer {
     public int getStatLevel(String profileName, String stat) throws DopoSoccerException {
         ToIntFunction<SaveFile> getter = STAT_LEVELS.get(stat == null ? null : stat.trim().toUpperCase());
         if (getter == null) {
-            throw new DopoSoccerException("Estadística no válida: " + stat);
+            throw new DopoSoccerException(INVALID_STAT+ stat);
         }
         return getter.applyAsInt(profileOf(profileName));
     }
@@ -261,4 +293,6 @@ public class DopoSoccer {
         temp.upgrade(stat);
         profile.syncFromPlayer(temp);
     }
+
+
 }

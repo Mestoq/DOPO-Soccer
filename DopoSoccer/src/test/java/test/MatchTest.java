@@ -1,7 +1,9 @@
 package test;
 
 import domain.DopoSoccerException;
-import domain.character.Character_;
+import domain.character.CameroonCharacter;
+import domain.character.KoreaCharacter;
+import domain.character.NigeriaCharacter;
 import domain.physics.Ball;
 import domain.physics.Field;
 import domain.player.Cpu;
@@ -70,10 +72,11 @@ public class MatchTest {
             m.update(0.1);
         }
     }
-    // adicionamos un metodo un metodo adicional que nos ayudara en algunos tests de mas adelante
-    private void giveCharacters(String c1, String c2) throws DopoSoccerException {
-        p1.setCharacter(Character_.create(c1));
-        p2.setCharacter(Character_.create(c2));
+
+    // Asigna Camerún a P1 y Nigeria a P2 para los tests de partido
+    private void giveDefaultCharacters() {
+        p1.setCharacter(new CameroonCharacter());
+        p2.setCharacter(new NigeriaCharacter());
     }
 
     /**
@@ -87,7 +90,6 @@ public class MatchTest {
         assertSame(field, m.getField());
         assertNotNull(m.getGameInfo());
     }
-
 
     /**
      * Verifica que al inicio activeBalls tiene un solo balón y que es el principal.
@@ -198,7 +200,7 @@ public class MatchTest {
     }
 
     /**
-     *  Verifica que el gol cuenta para P1.
+     * Verifica que el gol cuenta para P1.
      */
     @Test
     void ballInsideRightGoalScoresForPlayer1() {
@@ -232,7 +234,7 @@ public class MatchTest {
     }
 
     /**
-     * Pausa el partido y llama a update  y mira que ni el tiempo restante ni el transcurrido cambian.
+     * Pausa el partido y llama a update y mira que ni el tiempo restante ni el transcurrido cambian.
      */
     @Test
     @DisplayName("update no hace nada mientras el partido está en pausa")
@@ -257,7 +259,7 @@ public class MatchTest {
     }
 
     /**
-     * Tras un gol, llama a update durante la pausay mira que el tiempo restante no se descuenta y que sigue en pausa.
+     * Tras un gol, llama a update durante la pausa y mira que el tiempo restante no se descuenta y que sigue en pausa.
      */
     @Test
     void clockStopsDuringGoalPause() {
@@ -269,7 +271,7 @@ public class MatchTest {
     }
 
     /**
-     * mira que el balon vuelva al centro al meter gol.
+     * Mira que el balón vuelva al centro al meter gol.
      */
     @Test
     void ballReturnsToCenterAfterGoalPause() {
@@ -284,11 +286,11 @@ public class MatchTest {
     }
 
     /**
-     * Mueve a P1, marca un gol y y mira que ambos personajes vuelven a sus posiciones iniciales.
+     * Mueve a P1, marca un gol y mira que ambos personajes vuelven a sus posiciones iniciales.
      */
     @Test
-    void charactersReturnToStartAfterGoalPause() throws DopoSoccerException{
-        giveCharacters("CAMERUN", "NIGERIA");
+    void charactersReturnToStartAfterGoalPause() {
+        giveDefaultCharacters();
         Match m = goalMatch(5);
         p1.getCharacter().moveRight(1);
         m.update(0.3); // P1 se desplaza un poco
@@ -354,8 +356,8 @@ public class MatchTest {
      * Pone a P2 delante de P1 y P1 patea. Verifica que la vida de P2 baja.
      */
     @Test
-    void kickInRangeDamagesVictim() throws DopoSoccerException{
-        giveCharacters("CAMERUN", "NIGERIA");
+    void kickInRangeDamagesVictim() {
+        giveDefaultCharacters();
         Match m = goalMatch(5);
         // P1 mira a la derecha; se ubica a P2 pegado delante de P1
         p2.getCharacter().resetPosition(p1.getCharacter().getX() + 50, p1.getCharacter().getY());
@@ -369,8 +371,8 @@ public class MatchTest {
      * Hace varios update seguidos tras una patada y verifica que el daño se aplica una sola vez.
      */
     @Test
-    void kickDamageAppliesOnlyOnce() throws DopoSoccerException{
-        giveCharacters("CAMERUN", "NIGERIA");
+    void kickDamageAppliesOnlyOnce() {
+        giveDefaultCharacters();
         Match m = goalMatch(5);
         p2.getCharacter().resetPosition(p1.getCharacter().getX() + 50, p1.getCharacter().getY());
         p1.getCharacter().kick(p1.getNormalKickDamage());
@@ -385,8 +387,8 @@ public class MatchTest {
      * P1 patea con P2 lejos. Verifica que la vida de P2 no cambia.
      */
     @Test
-    void kickOutOfRangeDoesNoDamage() throws DopoSoccerException{
-        giveCharacters("CAMERUN", "NIGERIA");
+    void kickOutOfRangeDoesNoDamage() {
+        giveDefaultCharacters();
         Match m = goalMatch(5);
         double before = p2.getCurrentHealth();
         p1.getCharacter().kick(p1.getNormalKickDamage()); // P2 está a más de la mitad de la cancha
@@ -398,10 +400,10 @@ public class MatchTest {
      * Pasa un personaje que no pertenece al partido. Verifica que devuelve null.
      */
     @Test
-    void getOwnerOfUnknownCharacterIsNull() throws DopoSoccerException{
-        giveCharacters("CAMERUN", "NIGERIA");
+    void getOwnerOfUnknownCharacterIsNull() {
+        giveDefaultCharacters();
         Match m = goalMatch(5);
-        assertNull(m.getOwnerOf(Character_.create("COREA DEL SUR")));
+        assertNull(m.getOwnerOf(new KoreaCharacter()));
     }
 
     /**
@@ -461,17 +463,17 @@ public class MatchTest {
     }
 
     /**
-     * Corre 5s de partido contra la CPU con cada perfil (torpe, ofensiva, defensiva, experta). y  verifica que no se lanza ninguna excepción.
+     * Corre 5s de partido contra la CPU con cada perfil (torpe, ofensiva, defensiva, experta) y verifica que no se lanza ninguna excepción.
      */
     @Test
-    void matchRunsWithCpuProfiles() throws DopoSoccerException {
+    void matchRunsWithCpuProfiles() {
         for (String profile : new String[]{Cpu.PROFILE_CLUMSY, Cpu.PROFILE_OFFENSIVE,
                 Cpu.PROFILE_DEFENSIVE, Cpu.PROFILE_EXPERT}) {
             Field f = new Field(W, H);
             Player human = new HumanPlayer("Player 1");
             Cpu cpu = new Cpu("CPU", profile);
-            human.setCharacter(Character_.create("CAMERUN"));
-            cpu.setCharacter(Character_.create("NIGERIA"));
+            human.setCharacter(new CameroonCharacter());
+            cpu.setCharacter(new NigeriaCharacter());
             Match m = new GoalMatch(f, human, cpu, 10);
             assertDoesNotThrow(() -> advance(m, 5.0), profile);
         }
