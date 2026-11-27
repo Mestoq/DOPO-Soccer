@@ -1,0 +1,316 @@
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: BRAZIL
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: ATLANTIDA
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: NIGERIA
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: null
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: Debe seleccionar un personaje válido para el rival.
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: Error al exportar datos: invalid stream header: 6573746F
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores en preFixPlayers.
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: null
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: El archivo de partida no existe.
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: El archivo de destino no puede ser nulo.
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: El archivo de partida no existe.
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMERUN
+Nov 25, 2026 12:45:58 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores en preFixPlayers.
+Nov 25, 2026 12:46:51 PM domain.ErrorLog error
+SEVERE: El partido aún no ha terminado.
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: BRAZIL
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: ATLANTIDA
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: NIGERIA
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: null
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: Debe seleccionar un personaje válido para el rival.
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: Error al exportar datos: invalid stream header: 6573746F
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores en preFixPlayers.
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: null
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: El archivo de partida no existe.
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: Ela rchivo no puede estar vacio.
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: El archivo de partida no existe.
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMERUN
+Nov 25, 2026 1:29:43 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores en preFixPlayers.
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: BRAZIL
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: ATLANTIDA
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: NIGERIA
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: Personaje no existe: COREA DEL SUR
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: null
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: Debe seleccionar un personaje válido para el rival.
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: Error al importar datos de partido: invalid stream header: 6573746F
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: Personaje no existe: COREA DEL SUR
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: null
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMERUN
+Nov 25, 2026 2:02:22 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe:   camerun  
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe: BRAZIL
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe: COREA DEL SUR
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Error al importar datos de partido: invalid stream header: 6573746F
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe: COREA DEL SUR
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:49:54 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:51:49 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMEROON
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado:   cameroon 
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMEROON
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: Personaje no existe: BRAZIL
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: Personaje no existe: ATLANTIDA
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: Personaje no existe: COREA DEL SUR
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: Personaje no existe:    
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: Error al importar datos de partido: invalid stream header: 6573746F
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: KOREA
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:51:50 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:53:26 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMEROON
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: Personaje no existe: BRAZIL
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: Personaje no existe: ATLANTIDA
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: Personaje no existe: COREA DEL SUR
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: Personaje no existe:    
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: Error al importar datos de partido: invalid stream header: 6573746F
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:53:31 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: Personaje no existe: BRAZIL
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: Personaje no existe: ATLANTIDA
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: Personaje no existe: COREA DEL SUR
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: Personaje no existe:    
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: Error al importar datos de partido: invalid stream header: 6573746F
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:54:17 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:54:18 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:54:18 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:54:18 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: Personaje no existe: BRAZIL
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: Personaje no existe: ATLANTIDA
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: Personaje no existe: COREA DEL SUR
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: Personaje no existe:    
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: Error al importar datos de partido: invalid stream header: 6573746F
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: Personaje no existe: CAMERUN
+Nov 25, 2026 2:54:30 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: Personaje no existe: BRAZIL
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: Personaje no existe: ATLANTIDA
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMEROON
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: Personaje no existe:    
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: Error al importar datos de partido: invalid stream header: 6573746F
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMEROON
+Nov 25, 2026 2:55:07 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: Personaje no existe: BRAZIL
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: Personaje no existe: ATLANTIDA
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: Personaje no existe:    
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: Error al importar datos de partido: invalid stream header: 6573746F
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMEROON
+Nov 25, 2026 2:55:22 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: Personaje no existe: BRAZIL
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: Personaje no existe: ATLANTIDA
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: Personaje no existe:    
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: Error al importar datos de partido: invalid stream header: 6573746F
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: el jugador que no tiene personaje asignado: 
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: El archivo no puede estar vacio.
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: El personaje no está desbloqueado: CAMEROON
+Nov 25, 2026 2:55:35 PM domain.ErrorLog error
+SEVERE: Primero se deben configurar los jugadores.
+Nov 25, 2026 2:55:40 PM domain.ErrorLog error
+SEVERE: El partido aún no ha terminado.
