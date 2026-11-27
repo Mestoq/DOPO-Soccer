@@ -9,7 +9,7 @@ import domain.power.effect.ElectrocutedEffect;
 public class LightningPower extends Power {
 
     public LightningPower() {
-        super("Rayo", 60.0);
+        super(RAYO, 60.0);
     }
 
     @Override

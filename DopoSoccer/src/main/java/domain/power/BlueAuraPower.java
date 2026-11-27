@@ -11,7 +11,7 @@ public class BlueAuraPower extends Power {
     private boolean shotRight;
 
     public BlueAuraPower() {
-        super("Aura Azul", 40.0);
+        super(AURA_AZUL, 40.0);
         this.shotRight = true;
     }
 

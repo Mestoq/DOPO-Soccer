@@ -9,7 +9,7 @@ import domain.power.effect.UnconsciousEffect;
 public class TornadoPower extends Power {
 
     public TornadoPower() {
-        super("Tornado", 40.0);
+        super(TORNADO, 40.0);
     }
 
     @Override

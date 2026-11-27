@@ -5,7 +5,7 @@ import domain.character.Character_;
 public class ElectrocutedEffect extends Effect {
 
     public ElectrocutedEffect() {
-        super("Electrocutado", 3.0);
+        super(ELECTROCUTED, 3.0);
     }
 
     @Override

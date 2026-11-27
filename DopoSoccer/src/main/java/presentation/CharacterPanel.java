@@ -1,6 +1,7 @@
 package presentation;
 
 import domain.ErrorLog;
+import domain.character.Character_;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -23,7 +24,9 @@ public class CharacterPanel extends JPanel {
     private static final float LABEL_FONT_SIZE = 16f;
     private static final int LABEL_HEIGHT = 40;
 
-    private static final String[] CHARACTERS = {"KOREA", "CAMERUN", "NIGERIA", "USA"};
+    private static final String[] CHARACTERS = {
+            Character_.KOREA, Character_.CAMEROON, Character_.NIGERIA, Character_.USA
+    };
     private static final String[] IMAGE_PATHS = {
             "/images/character/korea.png",
             "/images/character/cameroon.png",

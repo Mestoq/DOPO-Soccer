@@ -7,7 +7,7 @@ import domain.physics.Ball;
 public class NigeriaCharacter extends Character_ {
 
     public NigeriaCharacter() {
-        super("NIGERIA", Power.create("TORNADO"));
+        super(NIGERIA, Power.create("TORNADO"));
     }
 
     @Override

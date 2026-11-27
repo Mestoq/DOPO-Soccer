@@ -1,6 +1,7 @@
 package presentation;
 
 import domain.ErrorLog;
+import domain.match.Match;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -216,8 +217,8 @@ public class MatchModePanel extends JPanel {
 
     /** @return "TIME", "GOALS" o null si aún no se ha elegido */
     public String getMatchType() {
-        if (selected == Mode.TIME) return "TIME";
-        if (selected == Mode.GOALS) return "GOALS";
+        if (selected == Mode.TIME) return Match.TYPE_TIME;
+        if (selected == Mode.GOALS) return Match.TYPE_GOALS;
         return null;
     }
 

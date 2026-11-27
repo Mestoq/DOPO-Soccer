@@ -27,16 +27,16 @@ public class DopoSoccer {
     private static final Map<String, ToIntFunction<SaveFile>> STAT_LEVELS = new HashMap<>();
 
     static {
-        STAT_LEVELS.put("SPEED", SaveFile::getSpeed);
-        STAT_LEVELS.put("JUMP", SaveFile::getJump);
-        STAT_LEVELS.put("KICK", SaveFile::getKick);
-        STAT_LEVELS.put("SURVIVAL", SaveFile::getSurvival);
+        STAT_LEVELS.put(Player.STAT_SPEED, SaveFile::getSpeed);
+        STAT_LEVELS.put(Player.STAT_JUMP, SaveFile::getJump);
+        STAT_LEVELS.put(Player.STAT_KICK, SaveFile::getKick);
+        STAT_LEVELS.put(Player.STAT_SURVIVAL, SaveFile::getSurvival);
     }
 
     private Match currentMatch;
     private final TreeMap<String, Player> players = new TreeMap<>();
     private final Map<String, SaveFile> profiles = new HashMap<>();   // un perfil por jugador humano
-    private final Set<String> loadedProfiles = new HashSet<>();       // perfiles cargados desde archivo
+    private MatchSnapshot savedMatch; // perfiles cargados desde archivo
     private final Map<String, MatchFactory> matchFactories = new HashMap<>();
     private final Map<String, CharacterFactory> characterFactories = new HashMap<>();
     private boolean resultApplied; // evita sumar dos veces los puntos de un mismo partido
@@ -44,13 +44,14 @@ public class DopoSoccer {
     public DopoSoccer() {
         this.currentMatch = null;
 
-        matchFactories.put("TIME",  (field, p1, p2, val) -> new TimeMatch(field, p1, p2, val));
-        matchFactories.put("GOALS", (field, p1, p2, val) -> new GoalMatch(field, p1, p2, (int) val));
+        matchFactories.put(Match.TYPE_TIME,  (field, p1, p2, val) -> new TimeMatch(field, p1, p2, val));
+        matchFactories.put(Match.TYPE_GOALS, (field, p1, p2, val) -> new GoalMatch(field, p1, p2, (int) val));
 
-        characterFactories.put("KOREA",    (country, power) -> new KoreaCharacter());
-        characterFactories.put("CAMEROON", (country, power) -> new CameroonCharacter());
-        characterFactories.put("NIGERIA",  (country, power) -> new NigeriaCharacter());
-        characterFactories.put("USA",      (country, power) -> new UsaCharacter());
+        characterFactories.put(Character_.KOREA,    (country, power) -> new KoreaCharacter());
+        characterFactories.put(Character_.CAMEROON, (country, power) -> new CameroonCharacter());
+        characterFactories.put(Character_.NIGERIA,  (country, power) -> new NigeriaCharacter());
+        characterFactories.put(Character_.USA,      (country, power) -> new UsaCharacter());
+
 
         profiles.put(PLAYER_1, new SaveFile());
         profiles.put(PLAYER_2, new SaveFile());
@@ -192,16 +193,22 @@ public class DopoSoccer {
     // Perfiles: cargar y guardar
 
     /**
-     * Abre un archivo de progreso y lo establece como el perfil del jugador indicado.
+     * Guarda en un solo archivo el progreso de ambos jugadores y, si se indica, el partido en curso.
      */
-    public void loadSave(String profileName, File file) throws DopoSoccerException {
-        profileOf(profileName); // valida el nombre
-        SaveFile loaded = SaveFile.abrir(file);
-        if (loaded == null || !loaded.getStatus()) {
-            throw new DopoSoccerException(INVALID_SAVEFILE);
-        }
-        profiles.put(profileName, loaded);
-        loadedProfiles.add(profileName);
+    public void saveGame(File file, MatchSnapshot matchInProgress) throws DopoSoccerException {
+        new GameSave(profileOf(PLAYER_1), profileOf(PLAYER_2), matchInProgress).guardar(file);
+    }
+
+
+     /**
+     * Abre un archivo de guardado: restaura el progreso de ambos jugadores y deja disponible
+     * el partido que tuviera guardado.
+     */
+    public void loadGame(File file) throws DopoSoccerException {
+        GameSave save = GameSave.abrir(file);
+        profiles.put(PLAYER_1, save.getPlayer1Profile());
+        profiles.put(PLAYER_2, save.getPlayer2Profile());
+        this.savedMatch = save.getMatch();
     }
 
     public Match loadMatch(MatchSnapshot snapshot, Field field) throws DopoSoccerException {
@@ -227,7 +234,7 @@ public class DopoSoccer {
     }
 
     private Player buildPlayer(String name, MatchSnapshot.PlayerState state) throws DopoSoccerException {
-        Player player = state.isHuman() ? new HumanPlayer(name) : new Cpu(name, state.getCpuProfile());
+        Player player = state.isHuman() ? new HumanPlayer(name) : Cpu.create(name, state.getCpuProfile());
 
 
         String country = state.getCountry();
@@ -250,9 +257,9 @@ public class DopoSoccer {
         profileOf(profileName).guardar(file);
     }
 
-    public boolean isSaveLoaded(String profileName) { return loadedProfiles.contains(profileName); }
 
-    public boolean isAnySaveLoaded() { return !loadedProfiles.isEmpty(); }
+    public boolean hasSavedMatch() { return savedMatch != null; }
+    public MatchSnapshot getSavedMatch() { return savedMatch; }
 
     // Tienda
 

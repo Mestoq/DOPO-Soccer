@@ -6,7 +6,7 @@ import org.dyn4j.geometry.Vector2;
 public class UnconsciousEffect extends Effect {
 
     public UnconsciousEffect() {
-        super("Inconsciente", 3.0);
+        super(UNCONSCIOUS, 3.0);
     }
 
     @Override

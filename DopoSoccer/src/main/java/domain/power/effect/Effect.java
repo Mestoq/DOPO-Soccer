@@ -7,6 +7,11 @@ public abstract class Effect {
     protected final String name;
     protected double remainingDuration;
 
+    public static final String PUSH = "Empuje";
+    public static final String ELECTROCUTED = "Electrocutado";
+    public static final String UNCONSCIOUS = "Inconsciente";
+    public static final String CONFUSION = "Confusión";
+
     protected Effect(String name, double durationSeconds) {
         this.name = name;
         this.remainingDuration = durationSeconds;

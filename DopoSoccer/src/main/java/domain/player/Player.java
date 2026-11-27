@@ -34,10 +34,18 @@ public abstract class Player {
     protected boolean powerAuraActive;
     protected double stunTimer;
 
+    public static final String STAT_SPEED = "SPEED";
+    public static final String STAT_JUMP = "JUMP";
+    public static final String STAT_KICK = "KICK";
+    public static final String STAT_SURVIVAL = "SURVIVAL";
+
+
     // Mapas para las mejoras
 
     private final Map<String, IntSupplier> statGetters = new HashMap<>();
     private final Map<String, Runnable> statUpgraders = new HashMap<>();
+
+
 
     public Player(String name, boolean isHuman) {
         this.name = name;
@@ -55,15 +63,15 @@ public abstract class Player {
     }
 
     private void initUpgradeRegistry() {
-        statGetters.put("SPEED", () -> this.speed);
-        statGetters.put("JUMP", () -> this.jump);
-        statGetters.put("KICK", () -> this.kick);
-        statGetters.put("SURVIVAL", () -> this.survival);
+        statGetters.put(STAT_SPEED, () -> this.speed);
+        statGetters.put(STAT_JUMP, () -> this.jump);
+        statGetters.put(STAT_KICK, () -> this.kick);
+        statGetters.put(STAT_SURVIVAL, () -> this.survival);
 
-        statUpgraders.put("SPEED", () -> this.speed++);
-        statUpgraders.put("JUMP", () -> this.jump++);
-        statUpgraders.put("KICK", () -> this.kick++);
-        statUpgraders.put("SURVIVAL", () -> {
+        statUpgraders.put(STAT_SPEED, () -> this.speed++);
+        statUpgraders.put(STAT_JUMP, () -> this.jump++);
+        statUpgraders.put(STAT_KICK, () -> this.kick++);
+        statUpgraders.put(STAT_SURVIVAL, () -> {
             this.survival++;
             this.currentHealth = getMaxHealth();
         });
@@ -149,6 +157,9 @@ public abstract class Player {
                 // [FIX 6] Al terminar el aturdimiento el personaje vuelve a poder actuar.
                 if (this.character != null) {
                     this.character.setStunned(false);
+                }
+                if (this.character != null) {
+                    this.character.update(dt);
                 }
             }
         }

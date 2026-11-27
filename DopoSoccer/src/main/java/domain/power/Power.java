@@ -12,14 +12,18 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public abstract class Power {
+    public static final String AURA_AZUL = "AURA AZUL";
+    public static final String RAYO = "RAYO";
+    public static final String TORNADO = "TORNADO";
+    public static final String ILUSION = "ILUSION";
 
     private static final Map<String, Supplier<Power>> POWER_FACTORIES = new HashMap<>();
 
     static {
-        POWER_FACTORIES.put("AURA AZUL", BlueAuraPower::new);
-        POWER_FACTORIES.put("RAYO",      LightningPower::new);
-        POWER_FACTORIES.put("TORNADO",   TornadoPower::new);
-        POWER_FACTORIES.put("ILUSION",   IllusionPower::new);
+        POWER_FACTORIES.put(AURA_AZUL, BlueAuraPower::new);
+        POWER_FACTORIES.put(RAYO,      LightningPower::new);
+        POWER_FACTORIES.put(TORNADO,   TornadoPower::new);
+        POWER_FACTORIES.put(ILUSION,   IllusionPower::new);
     }
 
     protected final String powerName;

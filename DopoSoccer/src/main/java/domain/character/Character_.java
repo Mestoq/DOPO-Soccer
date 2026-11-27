@@ -41,6 +41,11 @@ public abstract class Character_ extends GameObject {
     protected boolean velocityLocked;
     protected boolean stunned;
 
+    public static final String KOREA = "KOREA";
+    public static final String CAMEROON = "CAMEROON";
+    public static final String NIGERIA = "NIGERIA";
+    public static final String USA = "USA";
+
     protected Character_(String country, Power specialPower) {
         super(75.0, 95.0);
         this.country = country;

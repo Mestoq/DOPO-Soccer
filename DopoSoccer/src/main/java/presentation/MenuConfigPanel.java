@@ -19,6 +19,8 @@ import java.awt.GridBagLayout;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -64,6 +66,13 @@ public class MenuConfigPanel extends JPanel {
 
         // Resolución por defecto hasta que el jugador elija otra
         resolution.setGameResolution(RESOLUTIONS[resolutionIndex][0], RESOLUTIONS[resolutionIndex][1]);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                loadMatchButton.setEnabled(game.hasSavedMatch());
+            }
+        });
     }
 
     private BufferedImage loadImage(String path) {
@@ -82,7 +91,7 @@ public class MenuConfigPanel extends JPanel {
 
     private void prepareElements() {
         loadMatchButton = new MenuButton("LOAD ONGOING MATCH", this::onLoadMatch);
-        loadMatchButton.setEnabled(game.isAnySaveLoaded());
+        loadMatchButton.setEnabled(game.hasSavedMatch());
 
         addButton(new MenuButton("NEW MATCH", this::onNewGame), 0);
         addButton(new MenuButton("LOAD SAVE", this::onLoadGame), 1);
@@ -110,18 +119,16 @@ public class MenuConfigPanel extends JPanel {
 
     private void onLoadGame() {
         audio.playSound(CLICK_SOUND);
-        String profile = askProfile("Cargar partida");
-        if (profile == null) {
-            return;
-        }
         JFileChooser chooser = createChooser("Cargar partida");
         if (chooser.showOpenDialog(SwingUtilities.getWindowAncestor(this)) != JFileChooser.APPROVE_OPTION) {
             return;
         }
         try {
-            game.loadSave(profile, chooser.getSelectedFile());
-            loadMatchButton.setEnabled(game.isAnySaveLoaded());
-            showMessage("Progreso cargado", JOptionPane.INFORMATION_MESSAGE);
+            game.loadGame(chooser.getSelectedFile());
+            loadMatchButton.setEnabled(game.hasSavedMatch());
+            showMessage(game.hasSavedMatch()
+                    ? "Progreso y partido en curso cargados"
+                    : "Progreso cargado", JOptionPane.INFORMATION_MESSAGE);
         } catch (DopoSoccerException e) {
             showMessage(e.getMessage(), JOptionPane.ERROR_MESSAGE);
         }
@@ -129,18 +136,15 @@ public class MenuConfigPanel extends JPanel {
 
     private void onSaveGame() {
         audio.playSound(CLICK_SOUND);
-        String profile = askProfile("Guardar partida");
-        if (profile == null) {
-            return;
-        }
         JFileChooser chooser = createChooser("Guardar partida");
         if (chooser.showSaveDialog(SwingUtilities.getWindowAncestor(this)) != JFileChooser.APPROVE_OPTION) {
             return;
         }
         File file = withExtension(chooser.getSelectedFile());
         try {
-            game.saveProgress(profile, file);
-            showMessage("Progreso guardado", JOptionPane.INFORMATION_MESSAGE);
+            // Si hay un partido cargado sin jugar todavía, se conserva en el archivo
+            game.saveGame(file, game.getSavedMatch());
+            showMessage("Partida guardada", JOptionPane.INFORMATION_MESSAGE);
         } catch (DopoSoccerException e) {
             showMessage(e.getMessage(), JOptionPane.ERROR_MESSAGE);
         }
@@ -150,19 +154,11 @@ public class MenuConfigPanel extends JPanel {
 
     private void onLoadMatch() {
         audio.playSound(CLICK_SOUND);
-        JFileChooser chooser = createChooser("Cargar partido");
-        if (chooser.showOpenDialog(SwingUtilities.getWindowAncestor(this)) != JFileChooser.APPROVE_OPTION) {
-            return;
-        }
-        try {
-            MatchSnapshot snapshot = MatchSnapshot.abrir(chooser.getSelectedFile());
-            // La ventana toma el tamaño de la cancha con que se guardó el partido
-            resolution.setGameResolution((int) snapshot.getFieldWidth(), (int) snapshot.getFieldHeight());
-            gamePanel.loadMatch(snapshot);
-            rotation.goTo(DopoSoccerGUI.GAME_PANEL);
-        } catch (DopoSoccerException e) {
-            showMessage(e.getMessage(), JOptionPane.ERROR_MESSAGE);
-        }
+        MatchSnapshot snapshot = game.getSavedMatch();
+        // La ventana toma el tamaño de la cancha con que se guardó el partido
+        resolution.setGameResolution((int) snapshot.getFieldWidth(), (int) snapshot.getFieldHeight());
+        gamePanel.loadMatch(snapshot);
+        rotation.goTo(DopoSoccerGUI.GAME_PANEL);
     }
 
     private void onStore() {
@@ -210,24 +206,6 @@ public class MenuConfigPanel extends JPanel {
         chooser.setFileFilter(SAVE_FILTER);
         return chooser;
     }
-
-    private String askProfile(String title) {
-        String[] options = {"JUGADOR 1", "JUGADOR 2"};
-        int choice = JOptionPane.showOptionDialog(
-                SwingUtilities.getWindowAncestor(this),
-                "Selecciona el jugador dueño del perfil",
-                title,
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]);
-        if (choice < 0) {
-            return null;
-        }
-        return choice == 0 ? DopoSoccer.PLAYER_1 : DopoSoccer.PLAYER_2;
-    }
-
     private File withExtension(File file) {
         if (file.getName().toLowerCase().endsWith("." + SAVE_EXTENSION)) {
             return file;

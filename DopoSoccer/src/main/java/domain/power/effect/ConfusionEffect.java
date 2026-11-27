@@ -6,7 +6,7 @@ public class ConfusionEffect extends Effect {
     public static final double DURATION = 2.5;
 
     public ConfusionEffect() {
-        super("Confusión", DURATION);
+        super(CONFUSION, DURATION);
     }
 
     @Override

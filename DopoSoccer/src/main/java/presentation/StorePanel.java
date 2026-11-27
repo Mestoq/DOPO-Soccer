@@ -24,14 +24,16 @@ import java.net.URL;
 
 public class StorePanel extends JPanel {
 
+    private static final String[] STATS = {
+            Player.STAT_SPEED, Player.STAT_JUMP, Player.STAT_KICK, Player.STAT_SURVIVAL
+    };
+
     private static final String BACKGROUND_PATH = "/images/start/background.png";
     private static final String BACK_PATH = "/images/whovswho/back.png";
     private static final String CLICK_SOUND = "/audio/click.wav";
 
     private static final String[] PROFILES = {DopoSoccer.PLAYER_1, DopoSoccer.PLAYER_2};
     private static final String[] TITLES = {"JUGADOR 1", "JUGADOR 2"};
-    // Mismo orden en ambos arreglos: clave de DopoSoccer y rótulo en pantalla
-    private static final String[] STATS = {"SPEED", "JUMP", "KICK", "SURVIVAL"};
     private static final String[] STAT_LABELS = {"VELOCIDAD", "SALTO", "PATADA", "VIDA"};
 
     private static final int BACK_SIZE = 100;

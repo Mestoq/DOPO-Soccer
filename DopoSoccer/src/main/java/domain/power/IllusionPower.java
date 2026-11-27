@@ -19,7 +19,7 @@ public class IllusionPower extends Power {
     private static final double[] FAKE_HEIGHT_OFFSETS = {-5.0, 2.0, -2.5, 4.0, -0.8, -4.0, 1.0};
 
     public IllusionPower() {
-        super("Ilusión", 30.0);
+        super(ILUSION, 30.0);
     }
 
     @Override

@@ -7,7 +7,7 @@ import domain.physics.Ball;
 public class CameroonCharacter extends Character_ {
 
     public CameroonCharacter() {
-        super("CAMEROON", Power.create("RAYO"));
+        super(CAMEROON, Power.create("RAYO"));
     }
 
     @Override

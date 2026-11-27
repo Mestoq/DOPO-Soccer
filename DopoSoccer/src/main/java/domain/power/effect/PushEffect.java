@@ -8,7 +8,7 @@ public class PushEffect extends Effect {
     private final boolean pushRight;
 
     public PushEffect(boolean pushRight) {
-        super("Empuje", 1.5);
+        super(PUSH, 1.5);
         this.pushRight = pushRight;
     }
 

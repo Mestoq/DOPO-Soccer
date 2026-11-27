@@ -13,6 +13,7 @@ import domain.physics.Goal;
 import domain.player.Cpu;
 import domain.player.HumanPlayer;
 import domain.player.Player;
+import domain.power.Power;
 import domain.power.effect.Effect;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -30,7 +31,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
@@ -48,6 +48,37 @@ import java.util.function.Consumer;
 
 public class GamePanel extends JPanel {
 
+    private static final String[][] FLAG_SPRITES = {
+            {Character_.KOREA, "/images/game/flags/korea.png"},
+            {Character_.CAMEROON, "/images/game/flags/cameroon.png"},
+            {Character_.NIGERIA, "/images/game/flags/nigeria.png"},
+            {Character_.USA, "/images/game/flags/usa.png"}
+    };
+
+    private static final String[][] CHARACTER_SPRITES = {
+            {Character_.KOREA, "/images/character/korea.png",
+                    "/images/game/characters/korea_kick.png", "/images/game/aura/korea.png"},
+            {Character_.CAMEROON, "/images/character/cameroon.png",
+                    "/images/game/characters/cameroon_kick.png", "/images/game/aura/cameroon.png"},
+            {Character_.NIGERIA, "/images/character/nigeria.png",
+                    "/images/game/character/nigeria_kick.png", "/images/game/aura/nigeria.png"},
+            {Character_.USA, "/images/character/usa.png",
+                    "/images/game/characters/usa_kick.png", "/images/game/aura/usa.png"}
+    };
+
+    private static final String[][] EFFECT_SPRITES = {
+            {Effect.PUSH, "/images/game/effects/push.png"},
+            {Effect.ELECTROCUTED, "/images/game/effects/electrocuted.png"},
+            {Effect.UNCONSCIOUS, "/images/game/effects/unconscious.png"},
+            {Effect.CONFUSION, "/images/game/effects/confusion.png"}
+    };
+
+    private static final String[][] BALL_POWER_SPRITES = {
+            {Power.AURA_AZUL, "/images/game/ballpower/blue_aura.png"},
+            {Power.RAYO, "/images/game/ballpower/lightning.png"},
+            {Power.TORNADO, "/images/game/ballpower/tornado.png"}
+    };
+
     // Sprites generales
     private static final String BACKGROUND_PATH = "/images/game/background.png";
     private static final String GOAL_LEFT_PATH = "/images/game/goal_left.png";
@@ -59,38 +90,6 @@ public class GamePanel extends JPanel {
     private static final String BAR_FRAME_PATH = "/images/game/hud/bar_frame.png";
     private static final String HEALTH_FILL_PATH = "/images/game/hud/health_fill.png";
     private static final String POWER_FILL_PATH = "/images/game/hud/power_fill.png";
-    private static final String[][] FLAG_SPRITES = {
-            {"KOREA", "/images/game/flags/korea.png"},
-            {"CAMERUN", "/images/game/flags/cameroon.png"},
-            {"NIGERIA", "/images/game/flags/nigeria.png"},
-            {"USA", "/images/game/flags/usa.png"}
-    };
-
-    // Personaje: {país (clave de Character_.create), sprite normal, sprite de patada, aura del poder}
-    private static final String[][] CHARACTER_SPRITES = {
-            {"KOREA", "/images/character/korea.png",
-                    "/images/game/characters/korea_kick.png", "/images/game/aura/korea.png"},
-            {"CAMERUN", "/images/character/cameroon.png",
-                    "/images/game/characters/cameroon_kick.png", "/images/game/aura/cameroon.png"},
-            {"NIGERIA", "/images/character/nigeria.png",
-                    "/images/game/character/nigeria_kick.png", "/images/game/aura/nigeria.png"},
-            {"USA", "/images/character/usa.png",
-                    "/images/game/characters/usa_kick.png", "/images/game/aura/usa.png"}
-    };
-    // Icono del efecto negativo sobre la cabeza (clave = Effect.getName())
-    private static final String[][] EFFECT_SPRITES = {
-            {"Empuje", "/images/game/effects/push.png"},
-            {"Electrocutado", "/images/game/effects/electrocuted.png"},
-            {"Inconsciente", "/images/game/effects/unconscious.png"},
-            {"Confusión", "/images/game/effects/confusion.png"}
-    };
-    // Sprite sobre el balón con tiro de poder en vuelo (clave = Power.getPowerName()).
-    // Ilusión no tiene: si el balón real se distinguiera de los falsos, el poder no serviría.
-    private static final String[][] BALL_POWER_SPRITES = {
-            {"Aura Azul", "/images/game/ballpower/blue_aura.png"},
-            {"Rayo", "/images/game/ballpower/lightning.png"},
-            {"Tornado", "/images/game/ballpower/tornado.png"}
-    };
 
     private static final String CLICK_SOUND = "/audio/click.wav";
     private static final String SAVE_EXTENSION = "dat";
@@ -257,13 +256,13 @@ public class GamePanel extends JPanel {
                 Field field = new Field(width, height);
 
                 boolean cpuMode = whoVsWho.getMode() == WhoVsWhoPanel.Mode.HUMAN_VS_CPU;
-                human1 = new HumanPlayer("Player 1");
+                human1 = new HumanPlayer(DopoSoccer.PLAYER_1);
                 Player second;
                 if (cpuMode) {
                     human2 = null;
-                    second = new Cpu("CPU", whoVsWho.getCpuProfile());
+                    second = Cpu.create(DopoSoccer.CPU, whoVsWho.getCpuProfile());
                 } else {
-                    human2 = new HumanPlayer("Player 2");
+                    human2 = new HumanPlayer(DopoSoccer.PLAYER_2);
                     second = human2;
                 }
 
@@ -736,7 +735,6 @@ public class GamePanel extends JPanel {
 
         drawScoreboard(g2, w, s);
     }
-
     private void drawPlayerInfo(Graphics2D g2, Player p, String name, int x, int nameY, int healthY, int powerY,
                                 int barW, int barH, int powerH, boolean rightToLeft) {
         g2.setFont(infoFont);
@@ -748,7 +746,8 @@ public class GamePanel extends JPanel {
     }
 
     /**
-     * Dibuja el relleno recortado según la proporción y encima el marco.
+     * Dibuja el relleno recortado según la proporción y encima el marco,
+     * cuyo centro transparente deja ver la barra.
      * Se asume que fill y frame tienen las mismas proporciones.
      */
     private void drawBar(Graphics2D g2, int x, int y, int w, int h, double ratio, BufferedImage fill,
@@ -756,6 +755,7 @@ public class GamePanel extends JPanel {
         int fillW = (int) (w * Math.max(0.0, Math.min(1.0, ratio)));
         int clipX = rightToLeft ? x + (w - fillW) : x;
 
+        // Relleno
         Shape oldClip = g2.getClip();
         g2.setClip(clipX, y, fillW, h);
         if (fill != null) {
@@ -765,6 +765,7 @@ public class GamePanel extends JPanel {
         }
         g2.setClip(oldClip);
 
+        //Marco encima
         if (barFrame != null) {
             g2.drawImage(barFrame, x, y, w, h, null);
         } else {

@@ -30,6 +30,8 @@ public abstract class Match {
     private ContactListenerAdapter<Body> contactListener;
     private static final double CHARACTER_WIDTH_RATIO = 0.09;
     private static final double CHARACTER_HEIGHT_RATIO = 0.26;
+    public static final String TYPE_TIME = "TIME";
+    public static final String TYPE_GOALS = "GOALS";
 
     protected Match(Field field, Player player1, Player player2, InGameInfo gameInfo) {
         this.field = field;
@@ -176,9 +178,6 @@ public abstract class Match {
         player1.update(dt, this);
         player2.update(dt, this);
 
-        // Actualizar personajes
-        if (player1.getCharacter() != null) player1.getCharacter().update(dt);
-        if (player2.getCharacter() != null) player2.getCharacter().update(dt);
 
 
         resolveKickDamage(player1, player2);
